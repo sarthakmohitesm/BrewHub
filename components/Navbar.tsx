@@ -4,13 +4,13 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Coffee, Menu, X, ShoppingCart, User, LayoutDashboard } from 'lucide-react';
+import { Coffee, Menu, X, ShoppingCart, LayoutDashboard } from 'lucide-react';
 import { useCartStore } from '@/store/cartStore';
 
 const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/#about', label: 'About' },
-  { href: '/#menu-preview', label: 'Menu' },
+  { href: '/menu', label: 'Menu' },
   { href: '/register', label: 'Register' },
   { href: '/login', label: 'Login' },
 ];
@@ -34,35 +34,36 @@ export default function Navbar() {
       transition={{ duration: 0.6, ease: 'easeOut' }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? 'glass-strong py-3 shadow-lg shadow-black/30'
-          : 'bg-transparent py-5'
+          ? 'glass-strong shadow-xl shadow-black/40'
+          : 'bg-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
+        <div className={`flex items-center justify-between transition-all duration-300 ${scrolled ? 'h-16' : 'h-20'}`}>
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
+          <Link href="/" className="flex items-center gap-3 group shrink-0">
             <motion.div
-              whileHover={{ rotate: 15 }}
-              className="w-10 h-10 rounded-xl bg-gradient-to-br from-brew-accent to-brew-gold flex items-center justify-center"
+              whileHover={{ rotate: 15, scale: 1.05 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+              className="w-10 h-10 rounded-xl bg-gradient-to-br from-brew-accent to-brew-gold flex items-center justify-center shadow-lg shadow-brew-gold/20"
             >
-              <Coffee className="w-6 h-6 text-brew-dark" />
+              <Coffee className="w-5 h-5 text-brew-dark" />
             </motion.div>
-            <span className="text-2xl font-bold font-[family-name:var(--font-serif)] gradient-text">
+            <span className="text-xl font-bold font-[family-name:var(--font-serif)] gradient-text tracking-wide">
               BrewHub
             </span>
           </Link>
 
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-1">
+          {/* Desktop Nav Links — centered */}
+          <div className="hidden md:flex items-center gap-1 bg-white/[0.03] rounded-2xl px-2 py-1.5 border border-white/[0.04]">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                className={`relative px-5 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
                   pathname === link.href
-                    ? 'text-brew-gold bg-brew-gold/10'
-                    : 'text-brew-cream/70 hover:text-brew-cream hover:bg-white/5'
+                    ? 'text-brew-dark bg-gradient-to-r from-brew-accent to-brew-gold shadow-md shadow-brew-gold/15'
+                    : 'text-brew-cream/60 hover:text-brew-cream hover:bg-white/[0.06]'
                 }`}
               >
                 {link.label}
@@ -71,17 +72,17 @@ export default function Navbar() {
           </div>
 
           {/* Right Actions */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-2 shrink-0">
             <Link
               href="/menu"
-              className="relative p-2.5 rounded-xl glass hover:bg-brew-gold/10 transition-all group"
+              className="relative p-2.5 rounded-xl border border-white/[0.06] bg-white/[0.03] hover:bg-brew-gold/10 hover:border-brew-gold/20 transition-all group"
             >
-              <ShoppingCart className="w-5 h-5 text-brew-accent group-hover:text-brew-gold transition-colors" />
+              <ShoppingCart className="w-5 h-5 text-brew-cream/60 group-hover:text-brew-gold transition-colors" />
               {totalItems > 0 && (
                 <motion.span
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  className="absolute -top-1 -right-1 w-5 h-5 bg-brew-gold text-brew-dark text-xs font-bold rounded-full flex items-center justify-center"
+                  className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-gradient-to-br from-brew-accent to-brew-gold text-brew-dark text-[10px] font-bold rounded-full flex items-center justify-center shadow-lg shadow-brew-gold/30"
                 >
                   {totalItems}
                 </motion.span>
@@ -89,22 +90,22 @@ export default function Navbar() {
             </Link>
             <Link
               href="/owner/login"
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl glass hover:bg-brew-gold/10 transition-all"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-white/[0.06] bg-white/[0.03] hover:bg-brew-gold/10 hover:border-brew-gold/20 transition-all group"
             >
-              <LayoutDashboard className="w-4 h-4 text-brew-accent" />
-              <span className="text-sm font-medium text-brew-cream/80">Owner</span>
+              <LayoutDashboard className="w-4 h-4 text-brew-cream/60 group-hover:text-brew-gold transition-colors" />
+              <span className="text-sm font-medium text-brew-cream/60 group-hover:text-brew-cream transition-colors">Owner</span>
             </Link>
           </div>
 
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2 rounded-lg glass"
+            className="md:hidden p-2.5 rounded-xl border border-white/[0.06] bg-white/[0.03]"
           >
             {mobileOpen ? (
-              <X className="w-6 h-6 text-brew-accent" />
+              <X className="w-5 h-5 text-brew-accent" />
             ) : (
-              <Menu className="w-6 h-6 text-brew-accent" />
+              <Menu className="w-5 h-5 text-brew-accent" />
             )}
           </button>
         </div>
@@ -117,9 +118,9 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass-strong mt-2 mx-4 rounded-2xl overflow-hidden"
+            className="md:hidden glass-strong mx-4 mt-2 rounded-2xl overflow-hidden shadow-2xl"
           >
-            <div className="py-4 px-6 space-y-1">
+            <div className="py-4 px-5 space-y-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
@@ -127,28 +128,28 @@ export default function Navbar() {
                   onClick={() => setMobileOpen(false)}
                   className={`block px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                     pathname === link.href
-                      ? 'text-brew-gold bg-brew-gold/10'
-                      : 'text-brew-cream/70 hover:text-brew-cream hover:bg-white/5'
+                      ? 'text-brew-dark bg-gradient-to-r from-brew-accent to-brew-gold'
+                      : 'text-brew-cream/60 hover:text-brew-cream hover:bg-white/[0.06]'
                   }`}
                 >
                   {link.label}
                 </Link>
               ))}
-              <div className="pt-3 border-t border-brew-accent/10 flex gap-3">
+              <div className="pt-3 mt-2 border-t border-white/[0.06] flex gap-2">
                 <Link
                   href="/menu"
                   onClick={() => setMobileOpen(false)}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl glass text-brew-accent"
+                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border border-white/[0.06] bg-white/[0.03] text-brew-cream/60"
                 >
                   <ShoppingCart className="w-4 h-4" />
-                  <span className="text-sm">Menu</span>
+                  <span className="text-sm">Cart</span>
                 </Link>
                 <Link
                   href="/owner/login"
                   onClick={() => setMobileOpen(false)}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl glass text-brew-accent"
+                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border border-white/[0.06] bg-white/[0.03] text-brew-cream/60"
                 >
-                  <User className="w-4 h-4" />
+                  <LayoutDashboard className="w-4 h-4" />
                   <span className="text-sm">Owner</span>
                 </Link>
               </div>

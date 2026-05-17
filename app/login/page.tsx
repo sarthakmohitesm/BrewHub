@@ -46,37 +46,41 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center px-4 pt-24 pb-12">
+    <main className="min-h-screen flex items-center justify-center px-6 pt-28 pb-16">
+      {/* Ambient glow */}
+      <div className="fixed top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brew-gold/[0.03] rounded-full blur-[120px] pointer-events-none" />
+
       <motion.div
-        initial={{ opacity: 0, y: 40, scale: 0.95 }}
+        initial={{ opacity: 0, y: 30, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.7 }}
-        className="w-full max-w-md"
+        transition={{ duration: 0.6 }}
+        className="w-full max-w-md relative"
       >
         <div className="glass-card rounded-3xl p-8 sm:p-10 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-brew-gold/5 via-transparent to-brew-accent/3" />
+          <div className="absolute inset-0 bg-gradient-to-br from-brew-gold/[0.04] via-transparent to-brew-accent/[0.02] pointer-events-none" />
+          <div className="absolute -top-16 -right-16 w-40 h-40 bg-brew-gold/[0.06] rounded-full blur-[60px] pointer-events-none" />
 
           <div className="relative">
-            <div className="text-center mb-8">
+            <div className="text-center mb-9">
               <motion.div
                 animate={{ y: [-2, 2, -2] }}
-                transition={{ repeat: Infinity, duration: 3 }}
-                className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-brew-accent to-brew-gold flex items-center justify-center"
+                transition={{ repeat: Infinity, duration: 3.5, ease: 'easeInOut' }}
+                className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-brew-accent to-brew-gold flex items-center justify-center shadow-lg shadow-brew-gold/20"
               >
-                <Coffee className="w-8 h-8 text-brew-dark" />
+                <Coffee className="w-7 h-7 text-brew-dark" />
               </motion.div>
-              <h1 className="text-2xl font-bold font-[family-name:var(--font-serif)] text-brew-cream mb-2">
+              <h1 className="text-2xl font-bold font-[family-name:var(--font-serif)] text-brew-cream mb-2 tracking-tight">
                 Welcome Back
               </h1>
-              <p className="text-sm text-brew-cream/50">
+              <p className="text-sm text-brew-cream/45">
                 Enter your table details and login code to access the menu
               </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label className="block text-sm font-medium text-brew-cream/70 mb-2">
-                  <Hash className="w-4 h-4 inline mr-2" />
+                <label className="flex items-center gap-2 text-sm font-medium text-brew-cream/60 mb-2.5">
+                  <Hash className="w-4 h-4 text-brew-accent/60" />
                   Table Name / Number
                 </label>
                 <input
@@ -90,8 +94,8 @@ export default function LoginPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-brew-cream/70 mb-2">
-                  <Key className="w-4 h-4 inline mr-2" />
+                <label className="flex items-center gap-2 text-sm font-medium text-brew-cream/60 mb-2.5">
+                  <Key className="w-4 h-4 text-brew-accent/60" />
                   Login Code
                 </label>
                 <input
@@ -99,7 +103,7 @@ export default function LoginPage() {
                   value={loginCode}
                   onChange={(e) => setLoginCode(e.target.value.toUpperCase())}
                   placeholder="Enter your login code"
-                  className="input-brew font-mono tracking-widest"
+                  className="input-brew font-mono tracking-[0.2em]"
                   id="login-code"
                 />
               </div>
@@ -107,7 +111,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="btn-primary w-full flex items-center justify-center gap-2 text-base disabled:opacity-50"
+                className="btn-primary w-full flex items-center justify-center gap-2.5 disabled:opacity-50 mt-2"
               >
                 {loading ? (
                   <>
@@ -123,9 +127,9 @@ export default function LoginPage() {
               </button>
             </form>
 
-            <p className="text-center text-xs text-brew-cream/30 mt-6">
+            <p className="text-center text-xs text-brew-cream/25 mt-6">
               Don&apos;t have a code?{' '}
-              <a href="/register" className="text-brew-accent hover:text-brew-gold transition-colors">
+              <a href="/register" className="text-brew-accent/60 hover:text-brew-gold transition-colors">
                 Register your table
               </a>
             </p>

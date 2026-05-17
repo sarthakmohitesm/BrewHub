@@ -42,39 +42,44 @@ export default function RegisterPage() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center px-4 pt-24 pb-12">
+    <main className="min-h-screen flex items-center justify-center px-6 pt-28 pb-16">
+      {/* Ambient glow */}
+      <div className="fixed top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brew-gold/[0.03] rounded-full blur-[120px] pointer-events-none" />
+
       <motion.div
-        initial={{ opacity: 0, y: 40, scale: 0.95 }}
+        initial={{ opacity: 0, y: 30, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.7 }}
-        className="w-full max-w-md"
+        transition={{ duration: 0.6 }}
+        className="w-full max-w-md relative"
       >
         <div className="glass-card rounded-3xl p-8 sm:p-10 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-brew-gold/5 via-transparent to-brew-accent/3" />
+          {/* Decorative gradient */}
+          <div className="absolute inset-0 bg-gradient-to-br from-brew-gold/[0.04] via-transparent to-brew-accent/[0.02] pointer-events-none" />
+          <div className="absolute -top-16 -right-16 w-40 h-40 bg-brew-gold/[0.06] rounded-full blur-[60px] pointer-events-none" />
 
           <div className="relative">
             {!submitted ? (
               <>
-                <div className="text-center mb-8">
+                <div className="text-center mb-9">
                   <motion.div
-                    animate={{ rotate: [0, 5, -5, 0] }}
-                    transition={{ repeat: Infinity, duration: 4 }}
-                    className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-brew-accent to-brew-gold flex items-center justify-center"
+                    animate={{ y: [-2, 2, -2] }}
+                    transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
+                    className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-brew-accent to-brew-gold flex items-center justify-center shadow-lg shadow-brew-gold/20"
                   >
-                    <Coffee className="w-8 h-8 text-brew-dark" />
+                    <Coffee className="w-7 h-7 text-brew-dark" />
                   </motion.div>
-                  <h1 className="text-2xl font-bold font-[family-name:var(--font-serif)] text-brew-cream mb-2">
+                  <h1 className="text-2xl font-bold font-[family-name:var(--font-serif)] text-brew-cream mb-2 tracking-tight">
                     Register Your Table
                   </h1>
-                  <p className="text-sm text-brew-cream/50">
+                  <p className="text-sm text-brew-cream/45">
                     Enter your details to get started with your café experience
                   </p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <div>
-                    <label className="block text-sm font-medium text-brew-cream/70 mb-2">
-                      <Users className="w-4 h-4 inline mr-2" />
+                    <label className="flex items-center gap-2 text-sm font-medium text-brew-cream/60 mb-2.5">
+                      <Users className="w-4 h-4 text-brew-accent/60" />
                       Customer Name
                     </label>
                     <input
@@ -88,8 +93,8 @@ export default function RegisterPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-brew-cream/70 mb-2">
-                      <Hash className="w-4 h-4 inline mr-2" />
+                    <label className="flex items-center gap-2 text-sm font-medium text-brew-cream/60 mb-2.5">
+                      <Hash className="w-4 h-4 text-brew-accent/60" />
                       Table Name / Number
                     </label>
                     <input
@@ -105,7 +110,7 @@ export default function RegisterPage() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="btn-primary w-full flex items-center justify-center gap-2 text-base disabled:opacity-50"
+                    className="btn-primary w-full flex items-center justify-center gap-2.5 disabled:opacity-50 mt-2"
                   >
                     {loading ? (
                       <>
@@ -120,25 +125,32 @@ export default function RegisterPage() {
                     )}
                   </button>
                 </form>
+
+                <p className="text-center text-xs text-brew-cream/25 mt-6">
+                  Already have a code?{' '}
+                  <a href="/login" className="text-brew-accent/60 hover:text-brew-gold transition-colors">
+                    Login here
+                  </a>
+                </p>
               </>
             ) : (
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="text-center py-8"
+                className="text-center py-6"
               >
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  transition={{ type: 'spring', stiffness: 200 }}
-                  className="w-20 h-20 mx-auto mb-6 rounded-full bg-brew-success/10 flex items-center justify-center"
+                  transition={{ type: 'spring', stiffness: 200, delay: 0.1 }}
+                  className="w-20 h-20 mx-auto mb-6 rounded-full bg-brew-success/10 flex items-center justify-center border border-brew-success/20"
                 >
                   <CheckCircle className="w-10 h-10 text-brew-success" />
                 </motion.div>
-                <h2 className="text-xl font-bold text-brew-cream mb-2">
+                <h2 className="text-xl font-bold text-brew-cream mb-3">
                   Request Sent!
                 </h2>
-                <p className="text-sm text-brew-cream/50 mb-6">
+                <p className="text-sm text-brew-cream/45 mb-8 leading-relaxed">
                   Your table registration for <strong className="text-brew-gold">{tableName}</strong> has been sent.
                   The owner will generate a login code for you shortly.
                 </p>
