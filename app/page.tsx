@@ -1,7 +1,7 @@
 'use client';
 
 import React, { Suspense } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import {
@@ -13,272 +13,226 @@ import {
   Users,
   Sparkles,
   ChevronDown,
-  Zap,
 } from 'lucide-react';
 
 const CoffeeScene = dynamic(() => import('@/components/CoffeeScene'), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-full flex items-center justify-center">
-      <div className="w-16 h-16 rounded-full border-2 border-brew-accent/20 border-t-brew-gold animate-spin" />
+    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ width: 48, height: 48, borderRadius: '50%', border: '2px solid rgba(200,169,126,0.2)', borderTopColor: '#d4a853', animation: 'spin 1s linear infinite' }} />
     </div>
   ),
 });
 
-const fadeInUp = {
+const fadeUp = {
   hidden: { opacity: 0, y: 30 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.12, duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] },
+    transition: { delay: i * 0.12, duration: 0.6 },
   }),
 };
 
-const stagger = {
-  visible: { transition: { staggerChildren: 0.1 } },
-};
-
-/* ═══════════════════════════════════════════
-   HERO SECTION
-   ═══════════════════════════════════════════ */
+/* ════════════════════════════════════════════
+   HERO
+   ════════════════════════════════════════════ */
 function HeroSection() {
-  const { scrollYProgress } = useScroll();
-  const yText = useTransform(scrollYProgress, [0, 0.3], [0, -60]);
-  const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
-
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden" id="hero">
-      {/* Background layers */}
-      <div className="absolute inset-0 bg-gradient-to-b from-brew-dark/60 via-brew-dark/20 to-brew-dark z-[2]" />
-      <div className="absolute inset-0 bg-gradient-to-r from-brew-dark/90 via-brew-dark/40 to-transparent z-[2]" />
-      
-      {/* Ambient glow */}
-      <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-brew-gold/[0.04] rounded-full blur-[100px] z-[1]" />
-      <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-brew-accent/[0.03] rounded-full blur-[80px] z-[1]" />
+    <section
+      id="hero"
+      style={{
+        position: 'relative',
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Gradient overlays */}
+      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(8,6,4,0.5), rgba(8,6,4,0.2), #080604)', zIndex: 2 }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(8,6,4,0.95), rgba(8,6,4,0.3), transparent)', zIndex: 2 }} />
 
-      {/* 3D Scene */}
-      <div className="absolute right-0 top-0 w-full lg:w-[55%] h-full z-[1]">
-        <Suspense
-          fallback={
-            <div className="w-full h-full flex items-center justify-center">
-              <div className="w-16 h-16 rounded-full border-2 border-brew-accent/20 border-t-brew-gold animate-spin" />
-            </div>
-          }
-        >
+      {/* 3D coffee scene */}
+      <div style={{ position: 'absolute', top: 0, right: 0, width: '55%', height: '100%', zIndex: 1 }}>
+        <Suspense fallback={null}>
           <CoffeeScene />
         </Suspense>
       </div>
 
-      {/* Content */}
-      <motion.div
-        style={{ y: yText, opacity }}
-        className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-10"
-      >
+      {/* Text content */}
+      <div className="container-brew" style={{ position: 'relative', zIndex: 10 }}>
         <motion.div
-          variants={stagger}
           initial="hidden"
           animate="visible"
-          className="max-w-xl lg:max-w-2xl"
+          style={{ maxWidth: 560 }}
         >
           {/* Badge */}
-          <motion.div variants={fadeInUp} custom={0} className="mb-8">
-            <span className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full glass text-brew-accent text-sm font-medium shadow-lg shadow-black/20">
-              <Sparkles className="w-4 h-4 text-brew-gold" />
+          <motion.div variants={fadeUp} custom={0} style={{ marginBottom: 28 }}>
+            <span
+              className="glass"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                padding: '10px 20px',
+                borderRadius: 9999,
+                fontSize: '0.8rem',
+                fontWeight: 500,
+                color: '#c8a97e',
+              }}
+            >
+              <Sparkles style={{ width: 14, height: 14, color: '#d4a853' }} />
               Premium Artisan Coffee Experience
             </span>
           </motion.div>
 
           {/* Heading */}
           <motion.h1
-            variants={fadeInUp}
+            variants={fadeUp}
             custom={1}
-            className="text-4xl sm:text-5xl lg:text-[4.2rem] font-bold font-[family-name:var(--font-serif)] leading-[1.1] mb-7 tracking-tight"
+            style={{
+              fontFamily: 'var(--font-serif)',
+              fontSize: 'clamp(2.5rem, 5vw, 4rem)',
+              fontWeight: 700,
+              lineHeight: 1.1,
+              marginBottom: 24,
+              letterSpacing: '-0.02em',
+            }}
           >
-            Craft Your{' '}
-            <span className="gradient-text">Perfect</span>
+            Craft Your <span className="gradient-text">Perfect</span>
             <br />
             Coffee Moment
           </motion.h1>
 
           {/* Description */}
           <motion.p
-            variants={fadeInUp}
+            variants={fadeUp}
             custom={2}
-            className="text-base sm:text-lg text-brew-cream/55 leading-relaxed mb-10 max-w-md"
+            style={{
+              fontSize: '1rem',
+              color: 'rgba(245,230,208,0.55)',
+              lineHeight: 1.7,
+              marginBottom: 36,
+              maxWidth: 440,
+            }}
           >
             Immerse yourself in the art of coffee. From bean to cup, every sip is a journey through flavor, aroma, and craftsmanship.
           </motion.p>
 
-          {/* CTA Buttons */}
-          <motion.div
-            variants={fadeInUp}
-            custom={3}
-            className="flex flex-wrap gap-4 mb-16"
-          >
-            <Link href="/menu" className="btn-primary flex items-center gap-2.5 group">
+          {/* Buttons */}
+          <motion.div variants={fadeUp} custom={3} style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 56 }}>
+            <Link href="/menu" className="btn-primary">
               Explore Menu
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight style={{ width: 16, height: 16 }} />
             </Link>
             <Link href="/register" className="btn-outline">
               Reserve a Table
             </Link>
           </motion.div>
 
-          {/* Stats row */}
-          <motion.div
-            variants={fadeInUp}
-            custom={4}
-            className="flex gap-10 sm:gap-14"
-          >
+          {/* Stats */}
+          <motion.div variants={fadeUp} custom={4} style={{ display: 'flex', gap: 48 }}>
             {[
               { value: '50+', label: 'Drinks' },
-              { value: '10K+', label: 'Happy Customers' },
-              { value: '4.9', label: 'Rating', icon: Star },
-            ].map((stat) => (
-              <div key={stat.label}>
-                <div className="text-2xl sm:text-3xl font-bold text-brew-gold flex items-center gap-1.5">
-                  {stat.value}
-                  {stat.icon && <stat.icon className="w-5 h-5 fill-brew-gold text-brew-gold" />}
+              { value: '10K+', label: 'Customers' },
+              { value: '4.9', label: 'Rating', icon: true },
+            ].map((s) => (
+              <div key={s.label}>
+                <div style={{ fontSize: '1.6rem', fontWeight: 700, color: '#d4a853', display: 'flex', alignItems: 'center', gap: 4 }}>
+                  {s.value}
+                  {s.icon && <Star style={{ width: 16, height: 16, fill: '#d4a853', color: '#d4a853' }} />}
                 </div>
-                <div className="text-xs sm:text-sm text-brew-cream/35 mt-1.5 font-medium">{stat.label}</div>
+                <div style={{ fontSize: '0.78rem', color: 'rgba(245,230,208,0.35)', marginTop: 4, fontWeight: 500 }}>{s.label}</div>
               </div>
             ))}
           </motion.div>
         </motion.div>
-      </motion.div>
+      </div>
 
       {/* Scroll indicator */}
       <motion.div
         animate={{ y: [0, 8, 0] }}
-        transition={{ repeat: Infinity, duration: 2.5, ease: 'easeInOut' }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+        transition={{ repeat: Infinity, duration: 2.5 }}
+        style={{ position: 'absolute', bottom: 32, left: '50%', transform: 'translateX(-50%)', zIndex: 10, textAlign: 'center' }}
       >
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-[10px] uppercase tracking-[0.2em] text-brew-cream/25 font-medium">Scroll</span>
-          <ChevronDown className="w-5 h-5 text-brew-accent/30" />
-        </div>
+        <div style={{ fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.2em', color: 'rgba(245,230,208,0.2)', marginBottom: 6, fontWeight: 600 }}>Scroll</div>
+        <ChevronDown style={{ width: 18, height: 18, color: 'rgba(200,169,126,0.3)', margin: '0 auto' }} />
       </motion.div>
     </section>
   );
 }
 
-/* ═══════════════════════════════════════════
-   ABOUT SECTION
-   ═══════════════════════════════════════════ */
+/* ════════════════════════════════════════════
+   ABOUT
+   ════════════════════════════════════════════ */
 function AboutSection() {
-  return (
-    <section id="about" className="relative py-28 sm:py-36">
-      {/* Section divider */}
-      <div className="section-divider mb-28" />
+  const features = [
+    { icon: Award, title: 'Award Winning', desc: 'Best Café 2024' },
+    { icon: Clock, title: 'Fresh Daily', desc: 'Roasted in-house' },
+    { icon: Users, title: 'Community', desc: '10K+ members' },
+    { icon: Star, title: 'Top Rated', desc: '4.9/5 stars' },
+  ];
 
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-          {/* Left text content */}
+  return (
+    <section id="about" className="section-block">
+      <div className="section-divider" style={{ marginBottom: 80 }} />
+      <div className="container-brew">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 64 }}>
+          {/* Text */}
           <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
           >
-            <span className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full glass text-brew-accent text-sm font-medium mb-8">
-              <Coffee className="w-4 h-4 text-brew-gold" />
+            <span
+              className="glass"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                padding: '8px 18px',
+                borderRadius: 9999,
+                fontSize: '0.78rem',
+                fontWeight: 500,
+                color: '#c8a97e',
+                marginBottom: 24,
+              }}
+            >
+              <Coffee style={{ width: 14, height: 14, color: '#d4a853' }} />
               Our Story
             </span>
-            <h2 className="section-heading mb-7">
-              Where Passion Meets{' '}
-              <span className="gradient-text">Perfection</span>
+
+            <h2 className="section-heading" style={{ marginBottom: 24 }}>
+              Where Passion Meets <span className="gradient-text">Perfection</span>
             </h2>
-            <p className="text-brew-cream/50 leading-relaxed mb-5 text-[0.95rem]">
+
+            <p style={{ color: 'rgba(245,230,208,0.5)', lineHeight: 1.8, marginBottom: 16, maxWidth: 640, fontSize: '0.92rem' }}>
               Founded with a simple vision — to create a space where coffee lovers can experience the finest brews in an atmosphere of warmth and creativity. Every bean is ethically sourced, every cup is hand-crafted.
             </p>
-            <p className="text-brew-cream/50 leading-relaxed mb-10 text-[0.95rem]">
+            <p style={{ color: 'rgba(245,230,208,0.5)', lineHeight: 1.8, marginBottom: 40, maxWidth: 640, fontSize: '0.92rem' }}>
               Our baristas are trained artisans who pour their heart into every drink. From classic espressos to inventive seasonal specials, we&apos;re here to make your coffee experience unforgettable.
             </p>
 
-            {/* Feature grid */}
-            <div className="grid grid-cols-2 gap-4">
-              {[
-                { icon: Award, title: 'Award Winning', desc: 'Best Café 2024' },
-                { icon: Clock, title: 'Fresh Daily', desc: 'Roasted in-house' },
-                { icon: Users, title: 'Community', desc: '10K+ members' },
-                { icon: Star, title: 'Top Rated', desc: '4.9/5 rating' },
-              ].map((item, i) => (
+            {/* Feature cards */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, maxWidth: 500 }}>
+              {features.map((f, i) => (
                 <motion.div
-                  key={item.title}
+                  key={f.title}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.1, duration: 0.5 }}
-                  className="glass-card rounded-2xl p-5 group"
+                  transition={{ delay: i * 0.08 }}
+                  className="glass-card"
+                  style={{ borderRadius: 16, padding: 20 }}
                 >
-                  <div className="w-10 h-10 rounded-xl bg-brew-gold/10 flex items-center justify-center mb-3 group-hover:bg-brew-gold/20 transition-colors">
-                    <item.icon className="w-5 h-5 text-brew-gold" />
+                  <div style={{ width: 40, height: 40, borderRadius: 10, background: 'rgba(212,168,83,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
+                    <f.icon style={{ width: 18, height: 18, color: '#d4a853' }} />
                   </div>
-                  <h4 className="text-sm font-semibold text-brew-cream mb-1">{item.title}</h4>
-                  <p className="text-xs text-brew-cream/40">{item.desc}</p>
+                  <h4 style={{ fontSize: '0.85rem', fontWeight: 600, color: '#f5e6d0', marginBottom: 4 }}>{f.title}</h4>
+                  <p style={{ fontSize: '0.75rem', color: 'rgba(245,230,208,0.35)' }}>{f.desc}</p>
                 </motion.div>
               ))}
-            </div>
-          </motion.div>
-
-          {/* Right decorative panel */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.8, delay: 0.15 }}
-            className="relative hidden lg:block"
-          >
-            <div className="aspect-[4/5] rounded-3xl overflow-hidden glass-card p-1.5">
-              <div className="w-full h-full rounded-[22px] bg-gradient-to-br from-brew-medium via-brew-brown to-brew-dark flex items-center justify-center relative overflow-hidden">
-                {/* Concentric rotating circles */}
-                <div className="relative w-64 h-64">
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ repeat: Infinity, duration: 25, ease: 'linear' }}
-                    className="absolute inset-0 rounded-full border border-brew-accent/8"
-                  />
-                  <motion.div
-                    animate={{ rotate: -360 }}
-                    transition={{ repeat: Infinity, duration: 18, ease: 'linear' }}
-                    className="absolute inset-5 rounded-full border border-brew-accent/12"
-                  />
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ repeat: Infinity, duration: 12, ease: 'linear' }}
-                    className="absolute inset-10 rounded-full border border-dashed border-brew-accent/15"
-                  />
-                  <div className="absolute inset-16 rounded-full bg-gradient-to-br from-brew-accent/15 to-brew-gold/8 flex items-center justify-center shadow-inner">
-                    <Coffee className="w-14 h-14 text-brew-gold/50" />
-                  </div>
-                </div>
-
-                {/* Floating elements */}
-                <motion.div
-                  animate={{ y: [-8, 8, -8] }}
-                  transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
-                  className="absolute top-16 right-16 w-14 h-14 rounded-2xl glass flex items-center justify-center"
-                >
-                  <Star className="w-6 h-6 text-brew-gold/50" />
-                </motion.div>
-                <motion.div
-                  animate={{ y: [6, -6, 6] }}
-                  transition={{ repeat: Infinity, duration: 5, ease: 'easeInOut' }}
-                  className="absolute bottom-20 left-16 w-12 h-12 rounded-xl glass flex items-center justify-center"
-                >
-                  <Zap className="w-5 h-5 text-brew-accent/50" />
-                </motion.div>
-                <motion.div
-                  animate={{ x: [-5, 5, -5] }}
-                  transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut' }}
-                  className="absolute top-24 left-10 w-10 h-10 rounded-lg glass flex items-center justify-center"
-                >
-                  <Sparkles className="w-4 h-4 text-brew-gold/40" />
-                </motion.div>
-
-                {/* Bottom gradient overlay */}
-                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-brew-dark/60 to-transparent" />
-              </div>
             </div>
           </motion.div>
         </div>
@@ -287,9 +241,9 @@ function AboutSection() {
   );
 }
 
-/* ═══════════════════════════════════════════
+/* ════════════════════════════════════════════
    FEATURED MENU
-   ═══════════════════════════════════════════ */
+   ════════════════════════════════════════════ */
 const featuredItems = [
   { title: 'Caramel Macchiato', price: '₹249', category: 'Coffee', desc: 'Espresso with vanilla, steamed milk, and caramel drizzle', emoji: '☕' },
   { title: 'Matcha Latte', price: '₹229', category: 'Tea', desc: 'Ceremonial matcha whisked with creamy milk', emoji: '🍵' },
@@ -299,173 +253,177 @@ const featuredItems = [
 
 function FeaturedMenuSection() {
   return (
-    <section id="menu-preview" className="relative py-28 sm:py-36">
-      <div className="section-divider mb-28" />
-      
-      {/* Ambient glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brew-gold/[0.03] rounded-full blur-[120px]" />
-
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 relative">
-        {/* Section header */}
+    <section className="section-block">
+      <div className="section-divider" style={{ marginBottom: 80 }} />
+      <div className="container-brew">
+        {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          style={{ textAlign: 'center', marginBottom: 56 }}
         >
-          <span className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full glass text-brew-accent text-sm font-medium mb-7">
-            <Sparkles className="w-4 h-4 text-brew-gold" />
+          <span
+            className="glass"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 18px', borderRadius: 9999, fontSize: '0.78rem', fontWeight: 500, color: '#c8a97e', marginBottom: 20 }}
+          >
+            <Sparkles style={{ width: 14, height: 14, color: '#d4a853' }} />
             Signature Collection
           </span>
-          <h2 className="section-heading mb-4">
+          <h2 className="section-heading" style={{ marginBottom: 12 }}>
             Our <span className="gradient-text">Featured</span> Picks
           </h2>
-          <p className="text-brew-cream/45 max-w-lg mx-auto text-[0.95rem]">
+          <p style={{ color: 'rgba(245,230,208,0.4)', maxWidth: 440, margin: '0 auto', fontSize: '0.9rem' }}>
             Hand-selected favorites that keep our guests coming back for more
           </p>
         </motion.div>
 
-        {/* Cards grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {/* Cards */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 20 }}>
           {featuredItems.map((item, i) => (
             <motion.div
               key={item.title}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.08, duration: 0.5 }}
-              className="glass-card rounded-2xl overflow-hidden group"
+              transition={{ delay: i * 0.08 }}
+              className="glass-card"
+              style={{ borderRadius: 20, overflow: 'hidden' }}
             >
-              {/* Card top — emoji visual */}
-              <div className="h-44 bg-gradient-to-br from-brew-medium/80 to-brew-light/60 flex items-center justify-center relative">
-                <motion.span
-                  className="text-5xl drop-shadow-lg"
-                  whileHover={{ scale: 1.2, rotate: 8 }}
-                  transition={{ type: 'spring', stiffness: 300 }}
-                >
-                  {item.emoji}
-                </motion.span>
-                <span className="absolute top-3.5 right-3.5 px-3 py-1 rounded-full bg-brew-gold/15 text-brew-gold text-[10px] font-semibold uppercase tracking-wider border border-brew-gold/20">
+              {/* Card image area */}
+              <div style={{
+                height: 160,
+                background: 'linear-gradient(135deg, #231c14 0%, #342818 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'relative',
+              }}>
+                <span style={{ fontSize: 48 }}>{item.emoji}</span>
+                <span style={{
+                  position: 'absolute',
+                  top: 12,
+                  right: 12,
+                  padding: '4px 12px',
+                  borderRadius: 9999,
+                  background: 'rgba(212,168,83,0.15)',
+                  color: '#d4a853',
+                  fontSize: '0.65rem',
+                  fontWeight: 600,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                  border: '1px solid rgba(212,168,83,0.15)',
+                }}>
                   Popular
                 </span>
-                <div className="absolute inset-0 bg-gradient-to-t from-brew-dark/70 via-transparent to-transparent" />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(8,6,4,0.6), transparent)' }} />
               </div>
+
               {/* Card body */}
-              <div className="p-5">
-                <div className="flex items-start justify-between mb-2">
-                  <h3 className="font-semibold text-brew-cream text-[0.95rem] leading-snug">{item.title}</h3>
-                  <span className="text-brew-gold font-bold text-lg ml-3 shrink-0">{item.price}</span>
+              <div style={{ padding: 20 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
+                  <h3 style={{ fontSize: '0.95rem', fontWeight: 600, color: '#f5e6d0' }}>{item.title}</h3>
+                  <span style={{ fontSize: '1.1rem', fontWeight: 700, color: '#d4a853', whiteSpace: 'nowrap', marginLeft: 12 }}>{item.price}</span>
                 </div>
-                <p className="text-sm text-brew-cream/40 mb-4 leading-relaxed">{item.desc}</p>
-                <span className="inline-block text-[10px] px-3 py-1.5 rounded-full glass text-brew-accent/70 font-medium uppercase tracking-wider">
-                  {item.category}
-                </span>
+                <p style={{ fontSize: '0.8rem', color: 'rgba(245,230,208,0.4)', marginBottom: 14, lineHeight: 1.5 }}>{item.desc}</p>
+                <span style={{
+                  display: 'inline-block',
+                  padding: '4px 14px',
+                  borderRadius: 9999,
+                  fontSize: '0.65rem',
+                  fontWeight: 500,
+                  color: 'rgba(200,169,126,0.6)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                  background: 'rgba(200,169,126,0.06)',
+                  border: '1px solid rgba(200,169,126,0.08)',
+                }}>{item.category}</span>
               </div>
             </motion.div>
           ))}
         </div>
 
         {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mt-14"
-        >
-          <Link
-            href="/menu"
-            className="btn-primary inline-flex items-center gap-2.5 group"
-          >
+        <div style={{ textAlign: 'center', marginTop: 48 }}>
+          <Link href="/menu" className="btn-primary">
             View Full Menu
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight style={{ width: 16, height: 16 }} />
           </Link>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
 }
 
-/* ═══════════════════════════════════════════
+/* ════════════════════════════════════════════
    TESTIMONIALS
-   ═══════════════════════════════════════════ */
+   ════════════════════════════════════════════ */
 const testimonials = [
-  {
-    name: 'Priya Sharma',
-    role: 'Coffee Enthusiast',
-    text: 'The best cappuccino I\'ve ever had! The ambiance is incredible and the staff is so welcoming. Absolutely love this place.',
-    rating: 5,
-  },
-  {
-    name: 'Rahul Patel',
-    role: 'Regular Visitor',
-    text: 'BrewHub has become my second home. The matcha latte is absolutely divine — it keeps me coming back every single day.',
-    rating: 5,
-  },
-  {
-    name: 'Ananya Gupta',
-    role: 'Food Blogger',
-    text: 'From the décor to the desserts, everything screams premium quality. Highly recommend the tiramisu and the cold brew!',
-    rating: 5,
-  },
+  { name: 'Priya Sharma', role: 'Coffee Enthusiast', text: 'The best cappuccino I\'ve ever had! The ambiance is incredible and the staff is so welcoming.', rating: 5 },
+  { name: 'Rahul Patel', role: 'Regular Visitor', text: 'BrewHub has become my second home. The matcha latte is absolutely divine.', rating: 5 },
+  { name: 'Ananya Gupta', role: 'Food Blogger', text: 'From the décor to the desserts, everything screams premium quality. Highly recommend!', rating: 5 },
 ];
 
-function ExperienceSection() {
+function TestimonialsSection() {
   return (
-    <section className="relative py-28 sm:py-36 overflow-hidden">
-      <div className="section-divider mb-28" />
-
-      {/* Ambient glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brew-gold/[0.04] rounded-full blur-[130px]" />
-
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 relative">
+    <section className="section-block">
+      <div className="section-divider" style={{ marginBottom: 80 }} />
+      <div className="container-brew">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          style={{ textAlign: 'center', marginBottom: 56 }}
         >
-          <span className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full glass text-brew-accent text-sm font-medium mb-7">
-            <Star className="w-4 h-4 text-brew-gold" />
+          <span
+            className="glass"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 18px', borderRadius: 9999, fontSize: '0.78rem', fontWeight: 500, color: '#c8a97e', marginBottom: 20 }}
+          >
+            <Star style={{ width: 14, height: 14, color: '#d4a853' }} />
             Testimonials
           </span>
-          <h2 className="section-heading mb-4">
+          <h2 className="section-heading" style={{ marginBottom: 12 }}>
             What Our <span className="gradient-text">Guests</span> Say
           </h2>
-          <p className="text-brew-cream/45 max-w-lg mx-auto text-[0.95rem]">
+          <p style={{ color: 'rgba(245,230,208,0.4)', maxWidth: 440, margin: '0 auto', fontSize: '0.9rem' }}>
             Real experiences from the people who love BrewHub
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 20 }}>
           {testimonials.map((t, i) => (
             <motion.div
               key={t.name}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.5 }}
-              className="glass-card rounded-2xl p-7 flex flex-col"
+              transition={{ delay: i * 0.1 }}
+              className="glass-card"
+              style={{ borderRadius: 20, padding: 28, display: 'flex', flexDirection: 'column' }}
             >
               {/* Stars */}
-              <div className="flex gap-1 mb-5">
+              <div style={{ display: 'flex', gap: 3, marginBottom: 18 }}>
                 {Array.from({ length: t.rating }).map((_, j) => (
-                  <Star key={j} className="w-4 h-4 fill-brew-gold text-brew-gold" />
+                  <Star key={j} style={{ width: 14, height: 14, fill: '#d4a853', color: '#d4a853' }} />
                 ))}
               </div>
               {/* Quote */}
-              <p className="text-brew-cream/55 text-sm leading-relaxed mb-7 flex-1">
+              <p style={{ color: 'rgba(245,230,208,0.5)', fontSize: '0.85rem', lineHeight: 1.7, flex: 1, marginBottom: 24 }}>
                 &ldquo;{t.text}&rdquo;
               </p>
               {/* Author */}
-              <div className="flex items-center gap-3 pt-5 border-t border-white/[0.05]">
-                <div className="w-11 h-11 rounded-full bg-gradient-to-br from-brew-accent to-brew-gold flex items-center justify-center text-brew-dark font-bold text-sm shadow-lg shadow-brew-gold/15">
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, paddingTop: 18, borderTop: '1px solid rgba(200,169,126,0.06)' }}>
+                <div style={{
+                  width: 40, height: 40, borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #c8a97e, #d4a853)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  color: '#080604', fontWeight: 700, fontSize: '0.8rem',
+                }}>
                   {t.name[0]}
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-brew-cream">{t.name}</h4>
-                  <p className="text-xs text-brew-cream/35">{t.role}</p>
+                  <h4 style={{ fontSize: '0.82rem', fontWeight: 600, color: '#f5e6d0' }}>{t.name}</h4>
+                  <p style={{ fontSize: '0.7rem', color: 'rgba(245,230,208,0.3)' }}>{t.role}</p>
                 </div>
               </div>
             </motion.div>
@@ -476,44 +434,54 @@ function ExperienceSection() {
   );
 }
 
-/* ═══════════════════════════════════════════
-   CTA SECTION
-   ═══════════════════════════════════════════ */
+/* ════════════════════════════════════════════
+   CTA
+   ════════════════════════════════════════════ */
 function CTASection() {
   return (
-    <section className="relative py-24 sm:py-32">
-      <div className="section-divider mb-24" />
-
-      <div className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-10">
+    <section className="section-block">
+      <div className="section-divider" style={{ marginBottom: 80 }} />
+      <div className="container-brew" style={{ maxWidth: 800 }}>
         <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="glass-card rounded-3xl p-10 sm:p-16 text-center relative overflow-hidden"
+          className="glass-card"
+          style={{
+            borderRadius: 28,
+            padding: '56px 40px',
+            textAlign: 'center',
+            position: 'relative',
+            overflow: 'hidden',
+          }}
         >
           {/* Decorative gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-brew-gold/[0.04] via-transparent to-brew-accent/[0.03]" />
-          <div className="absolute -top-20 -right-20 w-60 h-60 bg-brew-gold/[0.06] rounded-full blur-[80px]" />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(212,168,83,0.04), transparent, rgba(200,169,126,0.03))', pointerEvents: 'none' }} />
 
-          <div className="relative">
+          <div style={{ position: 'relative' }}>
             <motion.div
               animate={{ y: [-3, 3, -3] }}
-              transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
-              className="w-16 h-16 mx-auto mb-8 rounded-2xl bg-gradient-to-br from-brew-accent to-brew-gold flex items-center justify-center shadow-lg shadow-brew-gold/20"
+              transition={{ repeat: Infinity, duration: 4 }}
+              style={{
+                width: 56, height: 56, borderRadius: 16, margin: '0 auto 28px',
+                background: 'linear-gradient(135deg, #c8a97e, #d4a853)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: '0 8px 24px rgba(212,168,83,0.2)',
+              }}
             >
-              <Coffee className="w-8 h-8 text-brew-dark" />
+              <Coffee style={{ width: 28, height: 28, color: '#080604' }} />
             </motion.div>
-            <h2 className="section-heading mb-5">
+
+            <h2 className="section-heading" style={{ marginBottom: 16 }}>
               Ready to <span className="gradient-text">Experience</span> BrewHub?
             </h2>
-            <p className="text-brew-cream/45 mb-10 max-w-md mx-auto text-[0.95rem]">
+            <p style={{ color: 'rgba(245,230,208,0.45)', marginBottom: 36, maxWidth: 400, margin: '0 auto 36px', fontSize: '0.9rem' }}>
               Reserve your table, explore our menu, and let us create your perfect coffee moment.
             </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link href="/register" className="btn-primary flex items-center gap-2.5 group">
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 16, flexWrap: 'wrap' }}>
+              <Link href="/register" className="btn-primary">
                 Reserve a Table
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight style={{ width: 16, height: 16 }} />
               </Link>
               <Link href="/menu" className="btn-outline">
                 Browse Menu
@@ -526,16 +494,16 @@ function CTASection() {
   );
 }
 
-/* ═══════════════════════════════════════════
-   MAIN PAGE EXPORT
-   ═══════════════════════════════════════════ */
+/* ════════════════════════════════════════════
+   MAIN EXPORT
+   ════════════════════════════════════════════ */
 export default function HomePage() {
   return (
     <main>
       <HeroSection />
       <AboutSection />
       <FeaturedMenuSection />
-      <ExperienceSection />
+      <TestimonialsSection />
       <CTASection />
     </main>
   );

@@ -22,141 +22,169 @@ export default function Navbar() {
   const totalItems = useCartStore((s) => s.getTotalItems());
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
+    const handler = () => setScrolled(window.scrollY > 30);
+    window.addEventListener('scroll', handler);
+    return () => window.removeEventListener('scroll', handler);
   }, []);
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? 'glass-strong shadow-xl shadow-black/40'
-          : 'bg-transparent'
-      }`}
+    <nav
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 100,
+        transition: 'background 0.4s, box-shadow 0.4s',
+        background: scrolled ? 'rgba(10,8,5,0.92)' : 'transparent',
+        backdropFilter: scrolled ? 'blur(24px)' : 'none',
+        boxShadow: scrolled ? '0 4px 24px rgba(0,0,0,0.5)' : 'none',
+        borderBottom: scrolled ? '1px solid rgba(200,169,126,0.08)' : '1px solid transparent',
+      }}
     >
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
-        <div className={`flex items-center justify-between transition-all duration-300 ${scrolled ? 'h-16' : 'h-20'}`}>
+      <div className="container-brew">
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          height: scrolled ? 60 : 72,
+          transition: 'height 0.3s',
+        }}>
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group shrink-0">
-            <motion.div
-              whileHover={{ rotate: 15, scale: 1.05 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-              className="w-10 h-10 rounded-xl bg-gradient-to-br from-brew-accent to-brew-gold flex items-center justify-center shadow-lg shadow-brew-gold/20"
-            >
-              <Coffee className="w-5 h-5 text-brew-dark" />
-            </motion.div>
-            <span className="text-xl font-bold font-[family-name:var(--font-serif)] gradient-text tracking-wide">
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', flexShrink: 0 }}>
+            <div style={{
+              width: 38, height: 38, borderRadius: 10,
+              background: 'linear-gradient(135deg, #c8a97e, #d4a853)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <Coffee style={{ width: 18, height: 18, color: '#080604' }} />
+            </div>
+            <span className="gradient-text" style={{ fontSize: '1.15rem', fontWeight: 700, fontFamily: 'var(--font-serif)', letterSpacing: '0.02em' }}>
               BrewHub
             </span>
           </Link>
 
-          {/* Desktop Nav Links — centered */}
-          <div className="hidden md:flex items-center gap-1 bg-white/[0.03] rounded-2xl px-2 py-1.5 border border-white/[0.04]">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`relative px-5 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
-                  pathname === link.href
-                    ? 'text-brew-dark bg-gradient-to-r from-brew-accent to-brew-gold shadow-md shadow-brew-gold/15'
-                    : 'text-brew-cream/60 hover:text-brew-cream hover:bg-white/[0.06]'
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
+          {/* Desktop nav links */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 4,
+            background: 'rgba(255,255,255,0.03)',
+            borderRadius: 16,
+            padding: '5px 6px',
+            border: '1px solid rgba(255,255,255,0.04)',
+          }}
+          className="desktop-nav"
+          >
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  style={{
+                    padding: '8px 18px',
+                    borderRadius: 10,
+                    fontSize: '0.82rem',
+                    fontWeight: 500,
+                    textDecoration: 'none',
+                    transition: 'all 0.3s',
+                    color: isActive ? '#080604' : 'rgba(245,230,208,0.55)',
+                    background: isActive ? 'linear-gradient(135deg, #c8a97e, #d4a853)' : 'transparent',
+                  }}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </div>
 
-          {/* Right Actions */}
-          <div className="hidden md:flex items-center gap-2 shrink-0">
-            <Link
-              href="/menu"
-              className="relative p-2.5 rounded-xl border border-white/[0.06] bg-white/[0.03] hover:bg-brew-gold/10 hover:border-brew-gold/20 transition-all group"
-            >
-              <ShoppingCart className="w-5 h-5 text-brew-cream/60 group-hover:text-brew-gold transition-colors" />
+          {/* Right side */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }} className="desktop-nav">
+            <Link href="/menu" style={{
+              position: 'relative', padding: 10, borderRadius: 10,
+              border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              textDecoration: 'none',
+            }}>
+              <ShoppingCart style={{ width: 18, height: 18, color: 'rgba(245,230,208,0.5)' }} />
               {totalItems > 0 && (
-                <motion.span
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-gradient-to-br from-brew-accent to-brew-gold text-brew-dark text-[10px] font-bold rounded-full flex items-center justify-center shadow-lg shadow-brew-gold/30"
-                >
+                <span style={{
+                  position: 'absolute', top: -4, right: -4,
+                  width: 18, height: 18, borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #c8a97e, #d4a853)',
+                  color: '#080604', fontSize: '0.6rem', fontWeight: 700,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
                   {totalItems}
-                </motion.span>
+                </span>
               )}
             </Link>
-            <Link
-              href="/owner/login"
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-white/[0.06] bg-white/[0.03] hover:bg-brew-gold/10 hover:border-brew-gold/20 transition-all group"
-            >
-              <LayoutDashboard className="w-4 h-4 text-brew-cream/60 group-hover:text-brew-gold transition-colors" />
-              <span className="text-sm font-medium text-brew-cream/60 group-hover:text-brew-cream transition-colors">Owner</span>
+            <Link href="/owner/login" style={{
+              display: 'flex', alignItems: 'center', gap: 6,
+              padding: '8px 14px', borderRadius: 10,
+              border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)',
+              textDecoration: 'none', color: 'rgba(245,230,208,0.5)', fontSize: '0.82rem', fontWeight: 500,
+            }}>
+              <LayoutDashboard style={{ width: 14, height: 14 }} />
+              Owner
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile menu button */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2.5 rounded-xl border border-white/[0.06] bg-white/[0.03]"
+            className="mobile-nav-btn"
+            style={{
+              display: 'none',
+              padding: 10, borderRadius: 10,
+              border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)',
+              cursor: 'pointer', color: '#c8a97e',
+            }}
           >
-            {mobileOpen ? (
-              <X className="w-5 h-5 text-brew-accent" />
-            ) : (
-              <Menu className="w-5 h-5 text-brew-accent" />
-            )}
+            {mobileOpen ? <X style={{ width: 20, height: 20 }} /> : <Menu style={{ width: 20, height: 20 }} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile dropdown */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass-strong mx-4 mt-2 rounded-2xl overflow-hidden shadow-2xl"
+            className="mobile-dropdown glass-strong"
+            style={{ margin: '0 16px 8px', borderRadius: 16, overflow: 'hidden' }}
           >
-            <div className="py-4 px-5 space-y-1">
+            <div style={{ padding: '16px 20px' }}>
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className={`block px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-                    pathname === link.href
-                      ? 'text-brew-dark bg-gradient-to-r from-brew-accent to-brew-gold'
-                      : 'text-brew-cream/60 hover:text-brew-cream hover:bg-white/[0.06]'
-                  }`}
+                  style={{
+                    display: 'block',
+                    padding: '12px 16px', borderRadius: 10, marginBottom: 4,
+                    fontSize: '0.85rem', fontWeight: 500, textDecoration: 'none',
+                    color: pathname === link.href ? '#080604' : 'rgba(245,230,208,0.55)',
+                    background: pathname === link.href ? 'linear-gradient(135deg, #c8a97e, #d4a853)' : 'transparent',
+                  }}
                 >
                   {link.label}
                 </Link>
               ))}
-              <div className="pt-3 mt-2 border-t border-white/[0.06] flex gap-2">
-                <Link
-                  href="/menu"
-                  onClick={() => setMobileOpen(false)}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border border-white/[0.06] bg-white/[0.03] text-brew-cream/60"
-                >
-                  <ShoppingCart className="w-4 h-4" />
-                  <span className="text-sm">Cart</span>
-                </Link>
-                <Link
-                  href="/owner/login"
-                  onClick={() => setMobileOpen(false)}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border border-white/[0.06] bg-white/[0.03] text-brew-cream/60"
-                >
-                  <LayoutDashboard className="w-4 h-4" />
-                  <span className="text-sm">Owner</span>
-                </Link>
-              </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.nav>
+
+      <style jsx>{`
+        @media (max-width: 768px) {
+          .desktop-nav { display: none !important; }
+          .mobile-nav-btn { display: flex !important; }
+        }
+      `}</style>
+    </nav>
   );
 }
