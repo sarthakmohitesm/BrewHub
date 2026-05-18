@@ -1,0 +1,73 @@
+import { IMenuItem } from '@/types';
+
+export const STATIC_MENU: IMenuItem[] = [
+  // ─── Coffee ───
+  { _id: 'c1', title: 'Classic Espresso', price: 79, category: 'coffee', image: 'https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?w=600&q=80&auto=format&fit=crop', description: 'Rich and bold single-shot espresso with golden crema', popular: true, prepTime: 5 },
+  { _id: 'c2', title: 'Cappuccino', price: 119, category: 'coffee', image: 'https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&q=80&auto=format&fit=crop', description: 'Velvety steamed milk with rich espresso and foam art', popular: true, prepTime: 7 },
+  { _id: 'c3', title: 'Latte', price: 129, category: 'coffee', image: 'https://images.unsplash.com/photo-1561047029-3000c68339ca?w=600&q=80&auto=format&fit=crop', description: 'Smooth espresso with silky steamed milk and delicate foam', popular: true, prepTime: 7 },
+  { _id: 'c4', title: 'Mocha Coffee', price: 139, category: 'coffee', image: 'https://images.unsplash.com/photo-1607345040012-d9d56ec82b1f?w=600&q=80&auto=format&fit=crop', description: 'Rich chocolate blended with espresso and steamed milk', popular: false, prepTime: 8 },
+  { _id: 'c5', title: 'Cold Coffee', price: 149, category: 'coffee', image: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=600&q=80&auto=format&fit=crop', description: 'Chilled coffee blended with milk, served over ice', popular: true, prepTime: 6 },
+  { _id: 'c6', title: 'Hazelnut Cold Coffee', price: 169, category: 'coffee', image: 'https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=600&q=80&auto=format&fit=crop', description: 'Cold coffee with hazelnut syrup, topped with whipped cream', popular: true, prepTime: 7 },
+  { _id: 'c7', title: 'Caramel Latte', price: 159, category: 'coffee', image: 'https://images.unsplash.com/photo-1485808191679-5f86510bd9d4?w=600&q=80&auto=format&fit=crop', description: 'Espresso with vanilla, steamed milk & caramel drizzle', popular: true, prepTime: 8 },
+  { _id: 'c8', title: 'Irish Coffee', price: 179, category: 'coffee', image: 'https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=600&q=80&auto=format&fit=crop', description: 'Warm coffee with Irish cream, topped with whipped cream', popular: false, prepTime: 8 },
+
+  // ─── Tea ───
+  { _id: 't1', title: 'Cutting Chai', price: 29, category: 'tea', image: 'https://images.unsplash.com/photo-1571771019784-3ff35f4f4277?w=600&q=80&auto=format&fit=crop', description: 'Strong half-cup chai brewed with milk — Mumbai style', popular: true, prepTime: 4 },
+  { _id: 't2', title: 'Masala Chai', price: 49, category: 'tea', image: 'https://images.unsplash.com/photo-1567922045116-2a00fae2ed03?w=600&q=80&auto=format&fit=crop', description: 'Traditional spiced tea with cardamom, ginger & cinnamon', popular: true, prepTime: 5 },
+  { _id: 't3', title: 'Ginger Tea', price: 59, category: 'tea', image: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&q=80&auto=format&fit=crop', description: 'Soothing hot tea with a bold ginger kick', popular: false, prepTime: 5 },
+  { _id: 't4', title: 'Green Tea', price: 69, category: 'tea', image: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=600&q=80&auto=format&fit=crop', description: 'Premium green tea leaves steeped to antioxidant-rich perfection', popular: false, prepTime: 5 },
+
+  // ─── Refreshers ───
+  { _id: 'r1', title: 'Lemon Iced Tea', price: 99, category: 'refreshers', image: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&q=80&auto=format&fit=crop', description: 'Chilled black tea with fresh lemon juice and mint', popular: false, prepTime: 5 },
+  { _id: 'r2', title: 'Peach Iced Tea', price: 109, category: 'refreshers', image: 'https://images.unsplash.com/photo-1499638673689-79a0b5115d87?w=600&q=80&auto=format&fit=crop', description: 'Fruity chilled tea infused with real peach flavour', popular: true, prepTime: 5 },
+  { _id: 'r3', title: 'Mojito Mint Cooler', price: 119, category: 'refreshers', image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=600&q=80&auto=format&fit=crop', description: 'Mint, lime & sparkling soda — ultimate non-alcoholic cooler', popular: true, prepTime: 6 },
+  { _id: 'r4', title: 'Watermelon Cooler', price: 129, category: 'refreshers', image: 'https://images.unsplash.com/photo-1527960471264-932f39eb5846?w=600&q=80&auto=format&fit=crop', description: 'Fresh watermelon blended with mint, chilled to perfection', popular: true, prepTime: 6 },
+
+  // ─── Snacks ───
+  { _id: 's1', title: 'Veg Sandwich', price: 99, category: 'snacks', image: 'https://images.unsplash.com/photo-1553909489-cd47e0907980?w=600&q=80&auto=format&fit=crop', description: 'Fresh veggies with chutneys & cheese in toasted bread', popular: false, prepTime: 8 },
+  { _id: 's2', title: 'Cheese Grilled Sandwich', price: 129, category: 'snacks', image: 'https://images.unsplash.com/photo-1528736235302-52922df5c122?w=600&q=80&auto=format&fit=crop', description: 'Golden grilled sandwich loaded with melted cheese', popular: true, prepTime: 10 },
+  { _id: 's3', title: 'Paneer Tikka Sandwich', price: 149, category: 'snacks', image: 'https://images.unsplash.com/photo-1567234669003-dce7a7a88821?w=600&q=80&auto=format&fit=crop', description: 'Spiced tikka paneer in crispy grilled bread with mint chutney', popular: true, prepTime: 12 },
+  { _id: 's4', title: 'French Fries', price: 89, category: 'snacks', image: 'https://images.unsplash.com/photo-1583339793403-3d9b001b6008?w=600&q=80&auto=format&fit=crop', description: 'Crispy golden potato fries seasoned with sea salt', popular: true, prepTime: 8 },
+  { _id: 's5', title: 'Peri Peri Fries', price: 109, category: 'snacks', image: 'https://images.unsplash.com/photo-1518013431117-eb1465fa5752?w=600&q=80&auto=format&fit=crop', description: 'Crispy fries tossed in fiery peri peri seasoning', popular: true, prepTime: 9 },
+  { _id: 's6', title: 'Garlic Bread', price: 119, category: 'snacks', image: 'https://images.unsplash.com/photo-1573140247632-f8fd74997d5c?w=600&q=80&auto=format&fit=crop', description: 'Crusty bread toasted with herb butter & roasted garlic', popular: false, prepTime: 8 },
+  { _id: 's7', title: 'Cheese Garlic Bread', price: 149, category: 'snacks', image: 'https://images.unsplash.com/photo-1506354666786-959d6d497f1a?w=600&q=80&auto=format&fit=crop', description: 'Garlic toast topped with generous melted cheese crust', popular: true, prepTime: 10 },
+  { _id: 's8', title: 'Veg Burger', price: 139, category: 'snacks', image: 'https://images.unsplash.com/photo-1550950158-d0d960dff596?w=600&q=80&auto=format&fit=crop', description: 'Juicy veggie patty with lettuce, tomato & zesty sauce', popular: false, prepTime: 12 },
+  { _id: 's9', title: 'Crispy Paneer Burger', price: 169, category: 'snacks', image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=80&auto=format&fit=crop', description: 'Crispy paneer patty with coleslaw, cheese & sriracha mayo', popular: true, prepTime: 14 },
+
+  // ─── Pizza & Pasta ───
+  { _id: 'p1', title: 'Margherita Pizza', price: 199, category: 'pizza', image: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=600&q=80&auto=format&fit=crop', description: 'Classic pizza with tomato sauce, mozzarella & basil', popular: true, prepTime: 15 },
+  { _id: 'p2', title: 'Farm Fresh Pizza', price: 249, category: 'pizza', image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80&auto=format&fit=crop', description: 'Seasonal veggies on herbed tomato base with mozzarella', popular: false, prepTime: 17 },
+  { _id: 'p3', title: 'Paneer Supreme Pizza', price: 289, category: 'pizza', image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&q=80&auto=format&fit=crop', description: 'Spiced paneer tikka on a creamy white sauce base', popular: true, prepTime: 18 },
+  { _id: 'p4', title: 'White Sauce Pasta', price: 189, category: 'pizza', image: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=600&q=80&auto=format&fit=crop', description: 'Penne in creamy béchamel sauce with herbs & parmesan', popular: true, prepTime: 14 },
+  { _id: 'p5', title: 'Red Sauce Pasta', price: 179, category: 'pizza', image: 'https://images.unsplash.com/photo-1608897013039-887f21d8c804?w=600&q=80&auto=format&fit=crop', description: 'Al dente pasta in robust tomato & basil marinara', popular: false, prepTime: 14 },
+  { _id: 'p6', title: 'Pink Sauce Pasta', price: 209, category: 'pizza', image: 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=600&q=80&auto=format&fit=crop', description: 'Creamy tomato-infused rose sauce — best of both worlds', popular: true, prepTime: 15 },
+
+  // ─── Desserts ───
+  { _id: 'd1', title: 'Brownie', price: 99, category: 'desserts', image: 'https://images.unsplash.com/photo-1548365328-8c6db3220e4c?w=600&q=80&auto=format&fit=crop', description: 'Dense, fudgy chocolate brownie with rich crackly top', popular: true, prepTime: 5 },
+  { _id: 'd2', title: 'Brownie with Ice Cream', price: 149, category: 'desserts', image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=600&q=80&auto=format&fit=crop', description: 'Warm brownie paired with a scoop of vanilla ice cream', popular: true, prepTime: 6 },
+  { _id: 'd3', title: 'Chocolate Pastry', price: 89, category: 'desserts', image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&q=80&auto=format&fit=crop', description: 'Moist chocolate sponge with chocolate ganache frosting', popular: false, prepTime: 5 },
+  { _id: 'd4', title: 'Cheesecake Slice', price: 169, category: 'desserts', image: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=600&q=80&auto=format&fit=crop', description: 'NY-style baked cheesecake on buttery graham cracker crust', popular: true, prepTime: 5 },
+  { _id: 'd5', title: 'Choco Lava Cake', price: 119, category: 'desserts', image: 'https://images.unsplash.com/photo-1617305855105-a1d1a4b4c5e3?w=600&q=80&auto=format&fit=crop', description: 'Warm chocolate cake with a gooey molten centre', popular: true, prepTime: 10 },
+  { _id: 'd6', title: 'Ice Cream Sundae', price: 139, category: 'desserts', image: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=600&q=80&auto=format&fit=crop', description: 'Three scoops topped with hot fudge, nuts & cherry', popular: false, prepTime: 5 },
+
+  // ─── Milkshakes & Smoothies ───
+  { _id: 'm1', title: 'Chocolate Shake', price: 139, category: 'milkshakes', image: 'https://images.unsplash.com/photo-1572490122747-3e9b6dabb5d3?w=600&q=80&auto=format&fit=crop', description: 'Thick, creamy chocolate milkshake with premium ice cream', popular: true, prepTime: 6 },
+  { _id: 'm2', title: 'Oreo Shake', price: 159, category: 'milkshakes', image: 'https://images.unsplash.com/photo-1541658016709-82535e94bc69?w=600&q=80&auto=format&fit=crop', description: 'Cookies & cream shake with real Oreo biscuits', popular: true, prepTime: 7 },
+  { _id: 'm3', title: 'KitKat Shake', price: 169, category: 'milkshakes', image: 'https://images.unsplash.com/photo-1577805947697-89e18249d767?w=600&q=80&auto=format&fit=crop', description: 'Creamy milkshake with KitKat pieces & whipped cream', popular: true, prepTime: 7 },
+  { _id: 'm4', title: 'Strawberry Shake', price: 149, category: 'milkshakes', image: 'https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=600&q=80&auto=format&fit=crop', description: 'Bright pink strawberry milkshake with real fruit', popular: false, prepTime: 6 },
+  { _id: 'm5', title: 'Mango Smoothie', price: 159, category: 'milkshakes', image: 'https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?w=600&q=80&auto=format&fit=crop', description: 'Fresh Alphonso mango blended into a tropical smoothie', popular: true, prepTime: 6 },
+  { _id: 'm6', title: 'Banana Peanut Smoothie', price: 169, category: 'milkshakes', image: 'https://images.unsplash.com/photo-1638176067000-77f3abdb3175?w=600&q=80&auto=format&fit=crop', description: 'Power-packed banana & peanut butter smoothie with honey', popular: false, prepTime: 6 },
+
+  // ─── Combos ───
+  { _id: 'cb1', title: 'Coffee + Sandwich', price: 199, category: 'combos', image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=80&auto=format&fit=crop', description: 'Any coffee paired with a freshly made veg sandwich', popular: true, prepTime: 12 },
+  { _id: 'cb2', title: 'Burger + Fries + Coke', price: 249, category: 'combos', image: 'https://images.unsplash.com/photo-1550950158-d0d960dff596?w=600&q=80&auto=format&fit=crop', description: 'Crispy burger, golden fries & chilled Coke — classic trio', popular: true, prepTime: 15 },
+  { _id: 'cb3', title: 'Pizza + Cold Coffee', price: 349, category: 'combos', image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80&auto=format&fit=crop', description: 'Any personal pizza with a refreshing cold coffee', popular: true, prepTime: 18 },
+  { _id: 'cb4', title: 'Pasta + Mojito', price: 299, category: 'combos', image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=600&q=80&auto=format&fit=crop', description: 'A bowl of pasta with a Mojito Mint Cooler on the side', popular: false, prepTime: 17 },
+  { _id: 'cb5', title: 'Couple Combo', price: 499, category: 'combos', image: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&q=80&auto=format&fit=crop', description: '2 coffees + 1 pizza + 1 dessert — perfect date at BrewHub', popular: true, prepTime: 20 },
+
+  // ─── Signature Specials ───
+  { _id: 'sp1', title: 'BrewHub Special Coffee', price: 199, category: 'specials', image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80&auto=format&fit=crop', description: 'Secret-recipe house blend — a multi-layered experience', popular: true, prepTime: 10 },
+  { _id: 'sp2', title: 'Smoky Paneer Platter', price: 299, category: 'specials', image: 'https://images.unsplash.com/photo-1567234669003-dce7a7a88821?w=600&q=80&auto=format&fit=crop', description: 'Smoky paneer skewers with mint chutney & onion salad', popular: true, prepTime: 18 },
+  { _id: 'sp3', title: 'Loaded Nachos', price: 249, category: 'specials', image: 'https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?w=600&q=80&auto=format&fit=crop', description: 'Crunchy nachos with cheese, jalapeños, salsa & sour cream', popular: true, prepTime: 12 },
+  { _id: 'sp4', title: 'Cafe Special Sizzler', price: 399, category: 'specials', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=600&q=80&auto=format&fit=crop', description: 'Sizzling platter with paneer, grilled veggies, rice & fries', popular: true, prepTime: 20 },
+];

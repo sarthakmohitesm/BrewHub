@@ -12,7 +12,7 @@ export interface IMenuItem {
   _id?: string;
   title: string;
   price: number;
-  category: 'coffee' | 'tea' | 'snacks' | 'desserts' | 'combos';
+  category: 'coffee' | 'tea' | 'refreshers' | 'snacks' | 'pizza' | 'desserts' | 'milkshakes' | 'combos' | 'specials';
   image: string;
   description: string;
   popular?: boolean;

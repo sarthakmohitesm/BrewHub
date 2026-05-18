@@ -7,7 +7,7 @@ const MenuItemSchema = new Schema<IMenuItem>(
     price: { type: Number, required: true },
     category: {
       type: String,
-      enum: ['coffee', 'tea', 'snacks', 'desserts', 'combos'],
+      enum: ['coffee', 'tea', 'refreshers', 'snacks', 'pizza', 'desserts', 'milkshakes', 'combos', 'specials'],
       required: true,
     },
     image: { type: String, required: true },
