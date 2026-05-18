@@ -254,9 +254,11 @@ function TablesTab() {
           )}
         </h3>
         {pending.length === 0 ? (
-          <div style={{ background: 'rgba(28,21,15,0.7)', border: '1px solid rgba(200,169,126,0.05)', borderRadius: 16, padding: '32px', textAlign: 'center' }}>
-            <CheckCircle className="w-10 h-10 mx-auto text-brew-success/40 mb-3" />
-            <p className="text-brew-cream/40 text-sm">No pending requests</p>
+          <div style={{ background: 'rgba(28,21,15,0.7)', border: '1px solid rgba(200,169,126,0.05)', borderRadius: 16, padding: '80px 32px', textAlign: 'center' }}>
+            <div style={{ width: 64, height: 64, borderRadius: '50%', border: '1px solid rgba(200,169,126,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+              <CheckCircle style={{ width: 28, height: 28, color: 'rgba(200,169,126,0.3)' }} />
+            </div>
+            <p style={{ color: 'rgba(245,230,208,0.4)', fontSize: '0.9rem' }}>No pending requests</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -315,9 +317,11 @@ function TablesTab() {
           </span>
         </h3>
         {active.length === 0 ? (
-          <div style={{ background: 'rgba(28,21,15,0.7)', border: '1px solid rgba(200,169,126,0.05)', borderRadius: 16, padding: '32px', textAlign: 'center' }}>
-            <Users className="w-10 h-10 mx-auto text-brew-cream/20 mb-3" />
-            <p className="text-brew-cream/40 text-sm">No active tables</p>
+          <div style={{ background: 'rgba(28,21,15,0.7)', border: '1px solid rgba(200,169,126,0.05)', borderRadius: 16, padding: '80px 32px', textAlign: 'center' }}>
+            <div style={{ width: 64, height: 64, borderRadius: '50%', border: '1px solid rgba(200,169,126,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+              <Users style={{ width: 28, height: 28, color: 'rgba(200,169,126,0.3)' }} />
+            </div>
+            <p style={{ color: 'rgba(245,230,208,0.4)', fontSize: '0.9rem' }}>No active tables</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -640,37 +644,46 @@ function AnalyticsTab() {
 
         {/* Orders by Status */}
         <div style={{ background: 'rgba(28,21,15,0.7)', border: '1px solid rgba(200,169,126,0.05)', borderRadius: 16, padding: '24px' }}>
-          <h3 className="text-lg font-semibold text-brew-cream mb-4 flex items-center gap-2">
+          <h3 className="text-lg font-semibold text-brew-cream mb-6 flex items-center gap-2">
             <BarChart3 className="w-5 h-5 text-brew-info" />
             Orders by Status
           </h3>
-          <div className="space-y-3">
-            {data.ordersByStatus.map((s) => (
-              <div key={s._id} className="flex items-center gap-3">
-                <span className={`badge badge-${s._id} capitalize flex-shrink-0`}>
-                  {s._id}
-                </span>
-                <div className="flex-1 h-2 rounded-full bg-brew-medium overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{
-                      width: `${Math.min(
-                        (s.count / Math.max(data.totalOrders, 1)) * 100,
-                        100
-                      )}%`,
-                    }}
-                    transition={{ duration: 1, delay: 0.5 }}
-                    className="h-full rounded-full bg-gradient-to-r from-brew-accent to-brew-gold"
-                  />
-                </div>
-                <span className="text-sm font-semibold text-brew-cream w-8 text-right">
-                  {s.count}
-                </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
+            {/* Doughnut Chart Mock */}
+            <div style={{ position: 'relative', width: 120, height: 120, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="120" height="120" viewBox="0 0 120 120" style={{ position: 'absolute', transform: 'rotate(-90deg)' }}>
+                <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(200,169,126,0.1)" strokeWidth="12" />
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#d4a853" strokeWidth="12" strokeDasharray={2 * Math.PI * 50} strokeDashoffset={(2 * Math.PI * 50) * 0.25} strokeLinecap="round" />
+              </svg>
+              <div style={{ textAlign: 'center' }}>
+                <span style={{ fontSize: '1.5rem', fontWeight: 700, color: '#f5e6d0', lineHeight: 1, display: 'block' }}>{data.totalOrders}</span>
+                <span style={{ fontSize: '0.7rem', color: 'rgba(245,230,208,0.4)' }}>Total</span>
               </div>
-            ))}
-            {data.ordersByStatus.length === 0 && (
-              <p className="text-brew-cream/40 text-sm text-center py-4">No data yet</p>
-            )}
+            </div>
+
+            {/* Legend */}
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {data.ordersByStatus.map((s, idx) => {
+                const colors = ['#d4a853', '#4ade80', '#60a5fa', '#a78bfa', '#f87171'];
+                const color = colors[idx % colors.length];
+                const percentage = data.totalOrders > 0 ? Math.round((s.count / data.totalOrders) * 100) : 0;
+                
+                return (
+                  <div key={s._id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <div style={{ width: 8, height: 8, borderRadius: '50%', background: color }} />
+                      <span style={{ fontSize: '0.85rem', color: '#f5e6d0', textTransform: 'capitalize' }}>{s._id}</span>
+                    </div>
+                    <div style={{ fontSize: '0.85rem', color: 'rgba(245,230,208,0.6)' }}>
+                      <span style={{ color: '#f5e6d0', fontWeight: 500 }}>{s.count}</span> ({percentage}%)
+                    </div>
+                  </div>
+                );
+              })}
+              {data.ordersByStatus.length === 0 && (
+                <p className="text-brew-cream/40 text-sm py-4">No data yet</p>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -718,50 +731,42 @@ export default function OwnerDashboard() {
   ];
 
   return (
-    <main style={{ minHeight: '100vh', paddingTop: 100, paddingBottom: 60, position: 'relative', backgroundColor: '#120d0a', backgroundImage: 'radial-gradient(circle at top, rgba(200,169,126,0.03), transparent 70%)' }}>
-
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
-        {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 16, marginBottom: 20, padding: '24px 28px', borderRadius: 20, background: 'rgba(28,21,15,0.7)', border: '1px solid rgba(200,169,126,0.05)' }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 4 }}>
-              <div style={{ width: 42, height: 42, borderRadius: 12, background: 'linear-gradient(135deg,#c8a97e,#d4a853)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(212,168,83,0.2)' }}>
-                <LayoutDashboard style={{ width: 20, height: 20, color: '#080604' }} />
-              </div>
-              <div>
-                <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem', fontWeight: 700, color: '#f5e6d0', lineHeight: 1.2 }}>Owner Dashboard</h1>
-                <p style={{ fontSize: '0.78rem', color: 'rgba(245,230,208,0.35)', marginTop: 2 }}>Manage your café operations in real-time</p>
-              </div>
-            </div>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <button onClick={handleSeed} disabled={seeding} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '9px 16px', borderRadius: 10, background: 'transparent', border: '1px solid rgba(200,169,126,0.15)', color: '#c8a97e', fontSize: '0.78rem', fontWeight: 500, cursor: 'pointer', opacity: seeding ? 0.5 : 1, fontFamily: 'inherit' }}>
-              {seeding ? <Loader2 style={{ width: 14, height: 14, animation: 'spin 1s linear infinite' }} /> : <Coffee style={{ width: 14, height: 14 }} />}
-              Seed Menu
-            </button>
-            <button onClick={() => window.location.reload()} style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(23,19,14,0.5)', border: '1px solid rgba(200,169,126,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#c8a97e' }}>
-              <RefreshCw style={{ width: 14, height: 14 }} />
-            </button>
-            <button onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '9px 16px', borderRadius: 10, background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.12)', color: '#f87171', fontSize: '0.78rem', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit' }}>
-              <LogOut style={{ width: 14, height: 14 }} /> Logout
-            </button>
-          </div>
-        </motion.div>
-
-        {/* Tabs */}
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} style={{ display: 'flex', gap: 8, marginBottom: 32, overflowX: 'auto', paddingBottom: 4 }}>
+    <main style={{ minHeight: '100vh', display: 'flex', backgroundColor: '#120d0a', paddingTop: 80 }}>
+      {/* Sidebar */}
+      <div style={{ width: 260, borderRight: '1px solid rgba(200,169,126,0.1)', display: 'flex', flexDirection: 'column', padding: '32px 24px', background: 'rgba(18,13,10,0.8)', zIndex: 10 }}>
+        
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, flex: 1 }}>
           {tabs.map((tab) => (
-            <button key={tab.id} onClick={() => setActiveTab(tab.id)} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '11px 22px', borderRadius: 14, fontSize: '0.82rem', fontWeight: 500, whiteSpace: 'nowrap', cursor: 'pointer', transition: 'all 0.3s', fontFamily: 'inherit', border: 'none', ...(activeTab === tab.id ? { background: 'linear-gradient(135deg,#c8a97e,#d4a853)', color: '#080604', boxShadow: '0 4px 16px rgba(212,168,83,0.2)' } : { background: 'rgba(28,21,15,0.7)', color: 'rgba(245,230,208,0.5)', border: '1px solid rgba(200,169,126,0.05)' }) }}>
-              <tab.icon style={{ width: 16, height: 16 }} />
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px', borderRadius: 12, fontSize: '0.9rem', fontWeight: 500, cursor: 'pointer', transition: 'all 0.3s', fontFamily: 'inherit', border: 'none',
+                ...(activeTab === tab.id 
+                  ? { background: 'rgba(200,169,126,0.1)', color: '#c8a97e', border: '1px solid rgba(200,169,126,0.2)' } 
+                  : { background: 'transparent', color: 'rgba(245,230,208,0.5)' })
+              }}
+            >
+              <tab.icon style={{ width: 18, height: 18, color: activeTab === tab.id ? '#c8a97e' : 'inherit' }} />
               {tab.label}
             </button>
           ))}
-        </motion.div>
+        </div>
 
-        {/* Divider */}
-        <div style={{ height: 1, background: 'linear-gradient(90deg, transparent, rgba(200,169,126,0.08), transparent)', marginBottom: 32 }} />
+        {/* Footer Actions in Sidebar */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 'auto' }}>
+          <button onClick={handleSeed} disabled={seeding} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '14px 20px', borderRadius: 12, background: 'transparent', border: '1px solid rgba(200,169,126,0.15)', color: '#c8a97e', fontSize: '0.85rem', fontWeight: 500, cursor: 'pointer', opacity: seeding ? 0.5 : 1, fontFamily: 'inherit' }}>
+            {seeding ? <Loader2 style={{ width: 16, height: 16, animation: 'spin 1s linear infinite' }} /> : <Coffee style={{ width: 16, height: 16 }} />}
+            Seed Menu
+          </button>
+          <button onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '14px 20px', borderRadius: 12, background: 'rgba(248,113,113,0.05)', border: '1px solid rgba(248,113,113,0.15)', color: '#f87171', fontSize: '0.85rem', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit' }}>
+            <LogOut style={{ width: 16, height: 16 }} /> Logout
+          </button>
+        </div>
+      </div>
 
-        {/* Tab Content */}
+      {/* Main Content Area */}
+      <div style={{ flex: 1, padding: '40px 60px', overflowY: 'auto', position: 'relative' }}>
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
@@ -769,7 +774,22 @@ export default function OwnerDashboard() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}
             transition={{ duration: 0.3 }}
+            style={{ maxWidth: 1200, margin: '0 auto' }}
           >
+            {/* Header for the current tab (except sessions) */}
+            {activeTab !== 'sessions' && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 40 }}>
+                {tabs.map((t) => t.id === activeTab && (
+                  <React.Fragment key={t.id}>
+                    <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(200,169,126,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(200,169,126,0.2)' }}>
+                      <t.icon style={{ width: 22, height: 22, color: '#c8a97e' }} />
+                    </div>
+                    <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', color: '#f5e6d0', margin: 0, fontWeight: 500 }}>{t.label}</h1>
+                  </React.Fragment>
+                ))}
+              </div>
+            )}
+            
             {activeTab === 'sessions' && <SessionsTab />}
             {activeTab === 'tables' && <TablesTab />}
             {activeTab === 'orders' && <OrdersTab />}
