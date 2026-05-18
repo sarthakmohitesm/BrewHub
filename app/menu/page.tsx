@@ -52,45 +52,64 @@ function MenuCard({ item }: { item: IMenuItem }) {
   const hasImg = item.image?.startsWith('http') && !imgErr;
 
   return (
-    <motion.div layout initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="glass-card rounded-2xl overflow-hidden group">
-      <div className="h-44 relative overflow-hidden" style={{ background: CAT_GRAD[item.category] || CAT_GRAD.coffee }}>
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      transition={{ duration: 0.4 }}
+      style={{
+        background: 'rgba(20, 16, 12, 0.65)',
+        backdropFilter: 'blur(16px)',
+        border: '1px solid rgba(200,169,126,0.07)',
+        borderRadius: 18,
+        overflow: 'hidden',
+        transition: 'border-color 0.4s, box-shadow 0.4s, transform 0.3s',
+      }}
+      whileHover={{ y: -4 }}
+      className="group"
+    >
+      {/* Image */}
+      <div style={{ height: 200, position: 'relative', overflow: 'hidden', background: CAT_GRAD[item.category] || CAT_GRAD.coffee }}>
         {hasImg ? (
-          <Image src={item.image} alt={item.title} fill style={{ objectFit: 'cover', transition: 'transform .5s' }} className="group-hover:scale-105" onError={() => setImgErr(true)} />
+          <Image src={item.image} alt={item.title} fill sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 25vw" style={{ objectFit: 'cover', transition: 'transform 0.6s ease' }} className="group-hover:scale-110" onError={() => setImgErr(true)} />
         ) : (
-          <div className="w-full h-full flex items-center justify-center"><Coffee className="w-12 h-12 text-brew-gold/30" /></div>
+          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Coffee style={{ width: 48, height: 48, color: 'rgba(212,168,83,0.2)' }} /></div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-brew-dark/70 via-transparent to-transparent" />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(8,6,4,0.85) 0%, rgba(8,6,4,0.15) 50%, transparent 100%)' }} />
         {item.popular && (
-          <span className="absolute top-3 left-3 flex items-center gap-1 px-2.5 py-1 rounded-full bg-brew-gold/20 text-brew-gold text-xs font-semibold backdrop-blur-sm border border-brew-gold/20">
-            <Star className="w-3 h-3 fill-brew-gold" /> Popular
+          <span style={{ position: 'absolute', top: 12, left: 12, display: 'inline-flex', alignItems: 'center', gap: 4, padding: '4px 10px', borderRadius: 999, background: 'rgba(212,168,83,0.15)', backdropFilter: 'blur(8px)', color: '#d4a853', fontSize: '0.65rem', fontWeight: 600, letterSpacing: '0.04em', border: '1px solid rgba(212,168,83,0.15)' }}>
+            <Star style={{ width: 10, height: 10, fill: '#d4a853', color: '#d4a853' }} /> Popular
           </span>
         )}
         {item.prepTime && (
-          <span className="absolute top-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded-full glass text-brew-cream/60 text-xs">
-            <Clock className="w-3 h-3" /> {item.prepTime}m
+          <span style={{ position: 'absolute', top: 12, right: 12, display: 'inline-flex', alignItems: 'center', gap: 4, padding: '4px 10px', borderRadius: 999, background: 'rgba(23,19,14,0.6)', backdropFilter: 'blur(8px)', color: 'rgba(245,230,208,0.5)', fontSize: '0.65rem', border: '1px solid rgba(200,169,126,0.08)' }}>
+            <Clock style={{ width: 10, height: 10 }} /> {item.prepTime}m
           </span>
         )}
+        {/* Price overlay on image bottom */}
+        <div style={{ position: 'absolute', bottom: 12, left: 16, right: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+          <h3 style={{ fontSize: '1rem', fontWeight: 600, color: '#f5e6d0', lineHeight: 1.3, textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}>{item.title}</h3>
+          <span style={{ fontSize: '1.1rem', fontWeight: 700, color: '#d4a853', whiteSpace: 'nowrap', marginLeft: 8, textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}>₹{item.price}</span>
+        </div>
       </div>
 
-      <div className="p-5">
-        <div className="flex items-start justify-between mb-1.5">
-          <h3 className="font-semibold text-brew-cream text-base leading-snug">{item.title}</h3>
-          <span className="text-brew-gold font-bold text-lg whitespace-nowrap ml-2">₹{item.price}</span>
-        </div>
-        <p className="text-sm text-brew-cream/40 mb-4 line-clamp-2">{item.description}</p>
+      {/* Body */}
+      <div style={{ padding: '14px 16px 16px' }}>
+        <p style={{ fontSize: '0.78rem', color: 'rgba(245,230,208,0.4)', lineHeight: 1.6, marginBottom: 14, minHeight: 38 }}>{item.description}</p>
 
         {qty === 0 ? (
-          <motion.button whileTap={{ scale: 0.95 }} onClick={() => addItem(item)} className="btn-primary w-full flex items-center justify-center gap-2 py-3 text-sm">
-            <Plus className="w-4 h-4" /> Add to Cart
+          <motion.button whileTap={{ scale: 0.96 }} onClick={() => addItem(item)} style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '11px 0', borderRadius: 12, background: 'linear-gradient(135deg,#c8a97e,#d4a853)', color: '#080604', fontWeight: 600, fontSize: '0.82rem', border: 'none', cursor: 'pointer', transition: 'box-shadow 0.3s', letterSpacing: '0.01em' }}>
+            <Plus style={{ width: 15, height: 15 }} /> Add to Cart
           </motion.button>
         ) : (
-          <div className="flex items-center justify-between">
-            <motion.button whileTap={{ scale: 0.9 }} onClick={() => qty > 1 ? updateQuantity(item._id!, qty - 1) : removeItem(item._id!)} className="w-10 h-10 rounded-xl glass flex items-center justify-center text-brew-accent hover:bg-brew-accent/10 transition-colors">
-              {qty === 1 ? <Trash2 className="w-4 h-4 text-brew-error" /> : <Minus className="w-4 h-4" />}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <motion.button whileTap={{ scale: 0.9 }} onClick={() => qty > 1 ? updateQuantity(item._id!, qty - 1) : removeItem(item._id!)} style={{ width: 40, height: 40, borderRadius: 10, background: 'rgba(23,19,14,0.6)', border: '1px solid rgba(200,169,126,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#c8a97e' }}>
+              {qty === 1 ? <Trash2 style={{ width: 15, height: 15, color: '#f87171' }} /> : <Minus style={{ width: 15, height: 15 }} />}
             </motion.button>
-            <motion.span key={qty} initial={{ scale: 1.3 }} animate={{ scale: 1 }} className="text-brew-gold font-bold text-lg min-w-[2rem] text-center">{qty}</motion.span>
-            <motion.button whileTap={{ scale: 0.9 }} onClick={() => addItem(item)} className="w-10 h-10 rounded-xl glass flex items-center justify-center text-brew-accent hover:bg-brew-accent/10 transition-colors">
-              <Plus className="w-4 h-4" />
+            <motion.span key={qty} initial={{ scale: 1.3 }} animate={{ scale: 1 }} style={{ color: '#d4a853', fontWeight: 700, fontSize: '1.1rem', minWidth: 32, textAlign: 'center' }}>{qty}</motion.span>
+            <motion.button whileTap={{ scale: 0.9 }} onClick={() => addItem(item)} style={{ width: 40, height: 40, borderRadius: 10, background: 'rgba(23,19,14,0.6)', border: '1px solid rgba(200,169,126,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#c8a97e' }}>
+              <Plus style={{ width: 15, height: 15 }} />
             </motion.button>
           </div>
         )}
@@ -183,6 +202,38 @@ function CartSidebar({ open, onClose }: { open: boolean; onClose: () => void }) 
   );
 }
 
+/* Category display labels */
+const CAT_LABELS: Record<string, { emoji: string; title: string }> = {
+  coffee:     { emoji: '☕', title: 'Coffee' },
+  tea:        { emoji: '🍵', title: 'Tea' },
+  refreshers: { emoji: '🧊', title: 'Refreshers' },
+  snacks:     { emoji: '🥪', title: 'Snacks & Quick Bites' },
+  pizza:      { emoji: '🍕', title: 'Pizza & Pasta' },
+  desserts:   { emoji: '🍰', title: 'Desserts' },
+  milkshakes: { emoji: '🥤', title: 'Milkshakes & Smoothies' },
+  combos:     { emoji: '⭐', title: 'BrewHub Special Combos' },
+  specials:   { emoji: '🔥', title: 'Signature Specials' },
+};
+
+/* ═══════ SECTION RENDER ═══════ */
+function CategorySection({ catId, items }: { catId: string; items: IMenuItem[] }) {
+  const info = CAT_LABELS[catId];
+  if (!info || items.length === 0) return null;
+  return (
+    <div style={{ marginBottom: 56 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24 }}>
+        <span style={{ fontSize: '1.3rem' }}>{info.emoji}</span>
+        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.2rem, 2.5vw, 1.6rem)', fontWeight: 700, color: '#f5e6d0' }}>{info.title}</h2>
+        <div style={{ flex: 1, height: 1, background: 'linear-gradient(90deg, rgba(200,169,126,0.15), transparent)', marginLeft: 8 }} />
+        <span style={{ fontSize: '0.7rem', color: 'rgba(200,169,126,0.3)', fontWeight: 500 }}>{items.length} items</span>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(270px, 1fr))', gap: 20 }}>
+        {items.map((item) => <MenuCard key={item._id} item={item} />)}
+      </div>
+    </div>
+  );
+}
+
 /* ═══════ MAIN MENU PAGE ═══════ */
 export default function MenuPage() {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -201,59 +252,73 @@ export default function MenuPage() {
     return list;
   }, [activeCategory, searchQuery]);
 
+  const grouped = useMemo(() => {
+    const cats = ['coffee','tea','refreshers','snacks','pizza','desserts','milkshakes','combos','specials'];
+    return cats.map((c) => ({ catId: c, items: filtered.filter((i) => i.category === c) })).filter((g) => g.items.length > 0);
+  }, [filtered]);
+
+  const showSections = activeCategory === 'all' && !searchQuery.trim();
+
   return (
-    <main className="min-h-screen pt-28 pb-16">
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
+    <main style={{ minHeight: '100vh', paddingTop: 120, paddingBottom: 80 }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px' }}>
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10">
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-brew-gold text-xs font-semibold uppercase tracking-widest mb-5">
-            <Sparkles className="w-3 h-3" /> Budget Friendly · Karjat · GST Included
+        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} style={{ textAlign: 'center', marginBottom: 48 }}>
+          <span className="glass" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 20px', borderRadius: 999, color: '#c8a97e', fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 20 }}>
+            <Sparkles style={{ width: 12, height: 12, color: '#d4a853' }} /> Budget Friendly · Karjat · GST Included
           </span>
-          <h1 className="section-heading mb-3">Our <span className="gradient-text">Menu</span></h1>
-          <p className="text-brew-cream/50 max-w-md mx-auto">Discover our curated collection of coffees, teas, snacks, pizzas, desserts and more</p>
-          <div className="flex flex-wrap justify-center gap-3 mt-5">
-            {[{ icon: '📶', text: 'Free WiFi' }, { icon: '📱', text: 'Self Ordering' }, { icon: '🕘', text: '9 AM – 11 PM' }, { icon: '⏱️', text: '10–20 min prep' }].map(({ icon, text }) => (
-              <span key={text} className="glass px-3 py-1.5 rounded-full text-xs text-brew-cream/50 flex items-center gap-1.5">{icon} {text}</span>
+          <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2rem, 4.5vw, 3.2rem)', fontWeight: 700, color: '#f5e6d0', marginBottom: 12, lineHeight: 1.15 }}>Our <span className="gradient-text">Menu</span></h1>
+          <p style={{ color: 'rgba(245,230,208,0.45)', maxWidth: 440, margin: '0 auto 20px', fontSize: '0.9rem', lineHeight: 1.7 }}>Handcrafted beverages, artisan bites, and signature specials — all at pocket-friendly prices</p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 10 }}>
+            {[{ icon: '📶', t: 'Free WiFi' }, { icon: '📱', t: 'Self Ordering' }, { icon: '🕘', t: '9 AM – 11 PM' }, { icon: '⏱️', t: '10–20 min prep' }].map(({ icon, t }) => (
+              <span key={t} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '5px 14px', borderRadius: 999, background: 'rgba(23,19,14,0.5)', border: '1px solid rgba(200,169,126,0.06)', color: 'rgba(245,230,208,0.35)', fontSize: '0.7rem' }}>{icon} {t}</span>
             ))}
           </div>
         </motion.div>
 
         {/* Search */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="max-w-lg mx-auto mb-8">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-brew-accent/40" />
-            <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search menu..." className="input-brew pl-12" id="menu-search" />
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} style={{ maxWidth: 480, margin: '0 auto 28px' }}>
+          <div style={{ position: 'relative' }}>
+            <Search style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', width: 18, height: 18, color: 'rgba(200,169,126,0.3)' }} />
+            <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search menu..." className="input-brew" style={{ paddingLeft: 46 }} id="menu-search" />
           </div>
         </motion.div>
 
         {/* Categories */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="flex flex-wrap justify-center gap-2 mb-10">
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 8, marginBottom: 44 }}>
           {categories.map((cat) => (
-            <button key={cat.id} onClick={() => setActiveCategory(cat.id)} className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${activeCategory === cat.id ? 'bg-brew-gold text-brew-dark shadow-lg shadow-brew-gold/20' : 'glass text-brew-cream/60 hover:text-brew-cream hover:bg-brew-accent/10'}`}>
-              <cat.icon className="w-4 h-4" /> {cat.label}
+            <button key={cat.id} onClick={() => setActiveCategory(cat.id)} style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '9px 18px', borderRadius: 12, fontSize: '0.8rem', fontWeight: 500, border: 'none', cursor: 'pointer', transition: 'all 0.3s', ...(activeCategory === cat.id ? { background: 'linear-gradient(135deg,#c8a97e,#d4a853)', color: '#080604', boxShadow: '0 4px 16px rgba(212,168,83,0.25)' } : { background: 'rgba(23,19,14,0.5)', color: 'rgba(245,230,208,0.5)', border: '1px solid rgba(200,169,126,0.06)' }) }}>
+              <cat.icon style={{ width: 15, height: 15 }} /> {cat.label}
             </button>
           ))}
         </motion.div>
 
-        {/* Menu Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filtered.length > 0 ? (
-            <AnimatePresence mode="popLayout">
-              {filtered.map((item) => <MenuCard key={item._id} item={item} />)}
-            </AnimatePresence>
+        {/* Divider */}
+        <div style={{ height: 1, background: 'linear-gradient(90deg, transparent, rgba(200,169,126,0.1), transparent)', maxWidth: 500, margin: '0 auto 44px' }} />
+
+        {/* Menu Content */}
+        {filtered.length > 0 ? (
+          showSections ? (
+            grouped.map((g) => <CategorySection key={g.catId} catId={g.catId} items={g.items} />)
           ) : (
-            <div className="col-span-full text-center py-16">
-              <Coffee className="w-12 h-12 mx-auto text-brew-cream/20 mb-4" />
-              <p className="text-brew-cream/40">No items found</p>
-              <p className="text-sm text-brew-cream/25 mt-1">Try a different category or search</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(270px, 1fr))', gap: 20 }}>
+              <AnimatePresence mode="popLayout">
+                {filtered.map((item) => <MenuCard key={item._id} item={item} />)}
+              </AnimatePresence>
             </div>
-          )}
-        </div>
+          )
+        ) : (
+          <div style={{ textAlign: 'center', padding: '64px 0' }}>
+            <Coffee style={{ width: 48, height: 48, margin: '0 auto 16px', color: 'rgba(245,230,208,0.15)' }} />
+            <p style={{ color: 'rgba(245,230,208,0.35)' }}>No items found</p>
+            <p style={{ fontSize: '0.8rem', color: 'rgba(245,230,208,0.2)', marginTop: 6 }}>Try a different category or search</p>
+          </div>
+        )}
       </div>
 
       {totalItems > 0 && (
-        <motion.button initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} onClick={() => setCartOpen(true)} className="fixed bottom-6 right-6 z-30 btn-primary flex items-center gap-3 py-4 px-6 rounded-2xl shadow-2xl shadow-brew-gold/20 animate-pulse-glow">
-          <ShoppingCart className="w-5 h-5" /> <span>{totalItems} items</span> <span className="text-xs opacity-80">·</span> <span className="font-bold">₹{total}</span>
+        <motion.button initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} onClick={() => setCartOpen(true)} className="animate-pulse-glow" style={{ position: 'fixed', bottom: 24, right: 24, zIndex: 30, display: 'flex', alignItems: 'center', gap: 10, padding: '14px 24px', borderRadius: 16, background: 'linear-gradient(135deg,#c8a97e,#d4a853)', color: '#080604', fontWeight: 600, fontSize: '0.88rem', border: 'none', cursor: 'pointer', boxShadow: '0 8px 32px rgba(212,168,83,0.3)' }}>
+          <ShoppingCart style={{ width: 18, height: 18 }} /> {totalItems} items <span style={{ opacity: 0.6 }}>·</span> <span style={{ fontWeight: 700 }}>₹{total}</span>
         </motion.button>
       )}
 

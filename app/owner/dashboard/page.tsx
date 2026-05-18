@@ -23,11 +23,160 @@ import {
   DollarSign,
   Loader2,
   Utensils,
+  Key,
+  Timer,
+  Trash2,
+  User,
+  Leaf,
+  Heart,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { ITable, IOrder } from '@/types';
 
-type Tab = 'tables' | 'orders' | 'analytics';
+type Tab = 'sessions' | 'tables' | 'orders' | 'analytics';
+
+/* ──────────── Sessions Tab ──────────── */
+function SessionsTab() {
+  const [code, setCode] = useState('------');
+  const [remaining, setRemaining] = useState(60);
+  const [sessions, setSessions] = useState<any[]>([]);
+
+  const fetchCode = useCallback(async () => {
+    try {
+      const res = await fetch('/api/auth/session-code');
+      const data = await res.json();
+      setCode(data.code);
+      setRemaining(data.remainingSeconds);
+      if (data.sessions) setSessions(data.sessions);
+    } catch {
+      /* silent */
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCode();
+    const interval = setInterval(fetchCode, 3000);
+    return () => clearInterval(interval);
+  }, [fetchCode]);
+
+  useEffect(() => {
+    if (remaining <= 0) return;
+    const t = setInterval(() => setRemaining((r) => Math.max(0, r - 1)), 1000);
+    return () => clearInterval(t);
+  }, [remaining]);
+
+  const handleRemoveSession = async (sessionId: string) => {
+    try {
+      await fetch('/api/auth/session-code', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId })
+      });
+      toast.success('Session removed');
+      fetchCode();
+    } catch {
+      toast.error('Failed to remove session');
+    }
+  };
+
+  const pct = Math.max(0, (remaining / 60) * 100);
+  const circleCircumference = 2 * Math.PI * 60;
+  const strokeDashoffset = circleCircumference - (pct / 100) * circleCircumference;
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 40, padding: '20px 0' }}>
+      
+      {/* Top Logo Section */}
+      <div style={{ textAlign: 'center' }}>
+        <Coffee style={{ width: 32, height: 32, color: '#c8a97e', margin: '0 auto 8px' }} />
+        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', letterSpacing: '0.2em', color: '#f5e6d0', fontWeight: 400, margin: 0 }}>CAFÉ</h2>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginTop: 4 }}>
+          <div style={{ height: 1, width: 40, background: 'rgba(200,169,126,0.3)' }} />
+          <span style={{ fontSize: '0.65rem', letterSpacing: '0.15em', color: 'rgba(200,169,126,0.6)', textTransform: 'uppercase' }}>Good Coffee, Good Day</span>
+          <div style={{ height: 1, width: 40, background: 'rgba(200,169,126,0.3)' }} />
+        </div>
+      </div>
+
+      {/* Center Display (Code + Timer) */}
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 24, width: '100%', maxWidth: 800 }}>
+        
+        {/* Code Box */}
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} style={{ flex: '1 1 400px', background: 'rgba(28,21,15,0.7)', border: '1px solid rgba(200,169,126,0.05)', borderRadius: 16, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 20px', position: 'relative' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+            <Leaf style={{ width: 14, height: 14, color: '#c8a97e', transform: 'rotate(-45deg)' }} />
+            <span style={{ fontSize: '0.75rem', letterSpacing: '0.2em', color: '#c8a97e', fontWeight: 600 }}>YOUR CODE</span>
+            <Leaf style={{ width: 14, height: 14, color: '#c8a97e', transform: 'rotate(135deg)' }} />
+          </div>
+          
+          <div style={{ display: 'flex', gap: 12, letterSpacing: '0.15em', fontFamily: 'monospace', fontSize: '3.8rem', fontWeight: 700, color: '#f5e6d0', lineHeight: 1 }}>
+            {code}
+          </div>
+          
+          <Heart style={{ width: 14, height: 14, color: 'rgba(200,169,126,0.3)', marginTop: 24 }} />
+        </motion.div>
+
+        {/* Timer Box */}
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.1 }} style={{ width: 300, background: 'rgba(28,21,15,0.7)', border: '1px solid rgba(200,169,126,0.05)', borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 20px' }}>
+          <div style={{ position: 'relative', width: 140, height: 140, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="140" height="140" viewBox="0 0 140 140" style={{ position: 'absolute', transform: 'rotate(-90deg)' }}>
+              <circle cx="70" cy="70" r="60" fill="none" stroke="rgba(200,169,126,0.1)" strokeWidth="6" />
+              <circle cx="70" cy="70" r="60" fill="none" stroke={remaining <= 10 ? '#f87171' : '#c8a97e'} strokeWidth="6" strokeDasharray={circleCircumference} strokeDashoffset={strokeDashoffset} strokeLinecap="round" style={{ transition: 'stroke-dashoffset 1s linear, stroke 0.3s' }} />
+            </svg>
+            <span style={{ fontSize: '2.5rem', fontWeight: 500, color: '#f5e6d0', lineHeight: 1, marginBottom: 4 }}>
+              {remaining}
+            </span>
+            <span style={{ fontSize: '0.7rem', letterSpacing: '0.1em', color: 'rgba(245,230,208,0.4)' }}>SEC</span>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Queue Section */}
+      <div style={{ width: '100%', maxWidth: 1000, marginTop: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginBottom: 24 }}>
+          <div style={{ height: 1, width: 60, background: 'rgba(200,169,126,0.2)' }} />
+          <span style={{ fontSize: '0.75rem', letterSpacing: '0.15em', color: '#c8a97e', fontWeight: 500 }}>CURRENT QUEUE</span>
+          <div style={{ height: 1, width: 60, background: 'rgba(200,169,126,0.2)' }} />
+        </div>
+
+        <div style={{ display: 'flex', gap: 16, overflowX: 'auto', paddingBottom: 16, justifyContent: sessions.length < 6 ? 'center' : 'flex-start' }}>
+          {sessions.length === 0 ? (
+            <div style={{ color: 'rgba(245,230,208,0.3)', fontSize: '0.9rem', fontStyle: 'italic', width: '100%', textAlign: 'center', padding: '20px 0' }}>No active customers</div>
+          ) : (
+            sessions.map((session, idx) => {
+              const tableNum = session.tableName.replace(/\D/g, '') || 'W/I';
+              return (
+                <motion.div key={session._id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }} style={{ flex: '0 0 auto', width: 140, background: 'rgba(28,21,15,0.7)', border: '1px solid rgba(200,169,126,0.05)', borderRadius: 12, padding: '24px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', position: 'relative' }}>
+                  <button onClick={() => handleRemoveSession(session._id)} title="Remove Session" style={{ position: 'absolute', top: 8, right: 8, background: 'transparent', border: 'none', color: 'rgba(248,113,113,0.3)', cursor: 'pointer', opacity: 0.5 }}>
+                     <Trash2 style={{ width: 14, height: 14 }} />
+                  </button>
+                  <div style={{ width: 48, height: 48, borderRadius: '50%', border: '1px solid rgba(200,169,126,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+                    <User style={{ width: 20, height: 20, color: 'rgba(200,169,126,0.5)' }} />
+                  </div>
+                  <p style={{ fontSize: '0.8rem', color: '#f5e6d0', marginBottom: 16, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', width: '100%' }}>{session.customerName}</p>
+                  
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, marginBottom: 12, width: '100%' }}>
+                    <div style={{ flex: 1, height: 1, background: 'rgba(200,169,126,0.1)' }} />
+                    <span style={{ fontSize: '0.6rem', letterSpacing: '0.1em', color: 'rgba(245,230,208,0.3)' }}>TABLE</span>
+                    <div style={{ flex: 1, height: 1, background: 'rgba(200,169,126,0.1)' }} />
+                  </div>
+                  
+                  <span style={{ fontSize: '1.8rem', fontFamily: 'var(--font-serif)', color: '#f5e6d0' }}>{tableNum.length === 1 ? `0${tableNum}` : tableNum}</span>
+                </motion.div>
+              );
+            })
+          )}
+        </div>
+      </div>
+
+      {/* Footer Message */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginTop: 40, opacity: 0.6 }}>
+        <Coffee style={{ width: 14, height: 14, color: '#c8a97e' }} />
+        <span style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', color: '#c8a97e', fontSize: '1.1rem' }}>Thank you for your patience!</span>
+        <Coffee style={{ width: 14, height: 14, color: '#c8a97e' }} />
+      </div>
+    </div>
+  );
+}
 
 /* ──────────── Tables Tab ──────────── */
 function TablesTab() {
@@ -105,7 +254,7 @@ function TablesTab() {
           )}
         </h3>
         {pending.length === 0 ? (
-          <div className="glass-card rounded-xl p-8 text-center">
+          <div style={{ background: 'rgba(28,21,15,0.7)', border: '1px solid rgba(200,169,126,0.05)', borderRadius: 16, padding: '32px', textAlign: 'center' }}>
             <CheckCircle className="w-10 h-10 mx-auto text-brew-success/40 mb-3" />
             <p className="text-brew-cream/40 text-sm">No pending requests</p>
           </div>
@@ -119,7 +268,8 @@ function TablesTab() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 20 }}
-                  className="glass-card rounded-xl p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4"
+                  style={{ background: 'rgba(28,21,15,0.7)', border: '1px solid rgba(200,169,126,0.05)', borderRadius: 16, padding: '20px', display: 'flex', flexDirection: 'column' }}
+                  className="sm:flex-row items-start sm:items-center gap-4"
                 >
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
@@ -165,7 +315,7 @@ function TablesTab() {
           </span>
         </h3>
         {active.length === 0 ? (
-          <div className="glass-card rounded-xl p-8 text-center">
+          <div style={{ background: 'rgba(28,21,15,0.7)', border: '1px solid rgba(200,169,126,0.05)', borderRadius: 16, padding: '32px', textAlign: 'center' }}>
             <Users className="w-10 h-10 mx-auto text-brew-cream/20 mb-3" />
             <p className="text-brew-cream/40 text-sm">No active tables</p>
           </div>
@@ -174,7 +324,7 @@ function TablesTab() {
             {active.map((table) => (
               <motion.div
                 key={table._id}
-                className="glass-card rounded-xl p-5"
+                style={{ background: 'rgba(28,21,15,0.7)', border: '1px solid rgba(200,169,126,0.05)', borderRadius: 16, padding: '20px' }}
                 whileHover={{ scale: 1.02 }}
               >
                 <div className="flex items-center justify-between mb-2">
@@ -183,12 +333,13 @@ function TablesTab() {
                 </div>
                 <p className="text-sm text-brew-cream/50 mb-3">{table.customerName}</p>
                 <div className="flex items-center gap-2">
-                  <span className="flex-1 px-3 py-2 rounded-lg glass font-mono text-brew-gold text-sm tracking-wider">
+                  <span style={{ flex: 1, padding: '8px 12px', borderRadius: 8, background: 'rgba(14,12,9,0.5)', border: '1px solid rgba(200,169,126,0.05)', fontFamily: 'monospace', color: '#c8a97e', fontSize: '0.875rem', letterSpacing: '0.05em' }}>
                     {table.loginCode}
                   </span>
                   <button
                     onClick={() => copyCode(table.loginCode!)}
-                    className="p-2 rounded-lg glass hover:bg-brew-accent/10 transition-colors"
+                    style={{ padding: '8px', borderRadius: 8, background: 'rgba(14,12,9,0.5)', border: '1px solid rgba(200,169,126,0.05)', cursor: 'pointer' }}
+                    className="hover:bg-brew-accent/10 transition-colors"
                   >
                     <Copy className="w-4 h-4 text-brew-accent" />
                   </button>
@@ -281,7 +432,7 @@ function OrdersTab() {
           ))}
         </div>
       ) : orders.length === 0 ? (
-        <div className="glass-card rounded-xl p-12 text-center">
+        <div style={{ background: 'rgba(28,21,15,0.7)', border: '1px solid rgba(200,169,126,0.05)', borderRadius: 16, padding: '48px', textAlign: 'center' }}>
           <ShoppingBag className="w-12 h-12 mx-auto text-brew-cream/20 mb-4" />
           <p className="text-brew-cream/40">No orders found</p>
         </div>
@@ -294,7 +445,7 @@ function OrdersTab() {
                 layout
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="glass-card rounded-xl p-5"
+                style={{ background: 'rgba(28,21,15,0.7)', border: '1px solid rgba(200,169,126,0.05)', borderRadius: 16, padding: '20px' }}
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                   <div>
@@ -317,7 +468,7 @@ function OrdersTab() {
                   {order.items.map((item, i) => (
                     <div
                       key={i}
-                      className="flex items-center justify-between text-sm px-3 py-2 rounded-lg glass"
+                      style={{ background: 'rgba(14,12,9,0.5)', border: '1px solid rgba(200,169,126,0.05)', borderRadius: 8, padding: '8px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.875rem' }}
                     >
                       <span className="text-brew-cream/70">
                         {item.menuItem.title} × {item.quantity}
@@ -426,31 +577,41 @@ function AnalyticsTab() {
     { icon: Utensils, label: 'Menu Items', value: data.totalMenuItems, color: 'text-purple-400' },
   ];
 
+  const statColors: Record<string, string> = {
+    'Total Orders': 'rgba(212,168,83,0.12)',
+    'Active Tables': 'rgba(96,165,250,0.12)',
+    'Revenue': 'rgba(74,222,128,0.12)',
+    'Menu Items': 'rgba(167,139,250,0.12)',
+  };
+
   return (
-    <div className="space-y-8">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
         {stats.map((stat, i) => (
           <motion.div
             key={stat.label}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-            className="glass-card rounded-xl p-5"
+            transition={{ delay: i * 0.08 }}
+            style={{ background: 'rgba(28,21,15,0.7)', border: '1px solid rgba(200,169,126,0.05)', borderRadius: 16, padding: '22px 24px', position: 'relative', overflow: 'hidden' }}
           >
-            <div className="flex items-center justify-between mb-3">
-              <stat.icon className={`w-6 h-6 ${stat.color}`} />
-              <TrendingUp className="w-4 h-4 text-brew-success/50" />
+            <div style={{ position: 'absolute', top: -20, right: -20, width: 80, height: 80, borderRadius: '50%', background: statColors[stat.label] || 'rgba(212,168,83,0.08)', pointerEvents: 'none' }} />
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14, position: 'relative' }}>
+              <div style={{ width: 40, height: 40, borderRadius: 12, background: statColors[stat.label] || 'rgba(212,168,83,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <stat.icon className={stat.color} style={{ width: 20, height: 20 }} />
+              </div>
+              <TrendingUp style={{ width: 14, height: 14, color: 'rgba(74,222,128,0.4)' }} />
             </div>
-            <p className="text-2xl font-bold text-brew-cream">{stat.value}</p>
-            <p className="text-sm text-brew-cream/40 mt-1">{stat.label}</p>
+            <p style={{ fontSize: '1.6rem', fontWeight: 700, color: '#f5e6d0', lineHeight: 1, position: 'relative' }}>{stat.value}</p>
+            <p style={{ fontSize: '0.75rem', color: 'rgba(245,230,208,0.35)', marginTop: 6, position: 'relative' }}>{stat.label}</p>
           </motion.div>
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Popular Dishes */}
-        <div className="glass-card rounded-xl p-6">
+        <div style={{ background: 'rgba(28,21,15,0.7)', border: '1px solid rgba(200,169,126,0.05)', borderRadius: 16, padding: '24px' }}>
           <h3 className="text-lg font-semibold text-brew-cream mb-4 flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-brew-gold" />
             Popular Dishes
@@ -459,7 +620,7 @@ function AnalyticsTab() {
             {data.popularDishes.map((dish, i) => (
               <div
                 key={dish._id}
-                className="flex items-center gap-3 p-3 rounded-lg glass"
+                style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px', borderRadius: 12, background: 'rgba(14,12,9,0.5)', border: '1px solid rgba(200,169,126,0.05)' }}
               >
                 <span className="w-8 h-8 rounded-lg bg-brew-gold/10 flex items-center justify-center text-brew-gold font-bold text-sm">
                   #{i + 1}
@@ -478,7 +639,7 @@ function AnalyticsTab() {
         </div>
 
         {/* Orders by Status */}
-        <div className="glass-card rounded-xl p-6">
+        <div style={{ background: 'rgba(28,21,15,0.7)', border: '1px solid rgba(200,169,126,0.05)', borderRadius: 16, padding: '24px' }}>
           <h3 className="text-lg font-semibold text-brew-cream mb-4 flex items-center gap-2">
             <BarChart3 className="w-5 h-5 text-brew-info" />
             Orders by Status
@@ -519,7 +680,7 @@ function AnalyticsTab() {
 
 /* ──────────── Dashboard Layout ──────────── */
 export default function OwnerDashboard() {
-  const [activeTab, setActiveTab] = useState<Tab>('tables');
+  const [activeTab, setActiveTab] = useState<Tab>('sessions');
   const [seeding, setSeeding] = useState(false);
   const router = useRouter();
 
@@ -550,77 +711,66 @@ export default function OwnerDashboard() {
   };
 
   const tabs = [
+    { id: 'sessions' as Tab, label: 'Sessions', icon: Key },
     { id: 'tables' as Tab, label: 'Tables', icon: Users },
     { id: 'orders' as Tab, label: 'Orders', icon: ShoppingBag },
     { id: 'analytics' as Tab, label: 'Analytics', icon: BarChart3 },
   ];
 
   return (
-    <main className="min-h-screen pt-24 pb-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main style={{ minHeight: '100vh', paddingTop: 100, paddingBottom: 60, position: 'relative', backgroundColor: '#120d0a', backgroundImage: 'radial-gradient(circle at top, rgba(200,169,126,0.03), transparent 70%)' }}>
+
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
         {/* Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 16, marginBottom: 20, padding: '24px 28px', borderRadius: 20, background: 'rgba(28,21,15,0.7)', border: '1px solid rgba(200,169,126,0.05)' }}>
           <div>
-            <h1 className="text-3xl font-bold font-[family-name:var(--font-serif)] text-brew-cream flex items-center gap-3">
-              <LayoutDashboard className="w-8 h-8 text-brew-gold" />
-              Dashboard
-            </h1>
-            <p className="text-brew-cream/50 text-sm mt-1">
-              Manage your café operations
-            </p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 4 }}>
+              <div style={{ width: 42, height: 42, borderRadius: 12, background: 'linear-gradient(135deg,#c8a97e,#d4a853)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(212,168,83,0.2)' }}>
+                <LayoutDashboard style={{ width: 20, height: 20, color: '#080604' }} />
+              </div>
+              <div>
+                <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem', fontWeight: 700, color: '#f5e6d0', lineHeight: 1.2 }}>Owner Dashboard</h1>
+                <p style={{ fontSize: '0.78rem', color: 'rgba(245,230,208,0.35)', marginTop: 2 }}>Manage your café operations in real-time</p>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={handleSeed}
-              disabled={seeding}
-              className="btn-outline text-sm flex items-center gap-2 py-2 px-4 disabled:opacity-50"
-            >
-              {seeding ? <Loader2 className="w-4 h-4 animate-spin" /> : <Coffee className="w-4 h-4" />}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <button onClick={handleSeed} disabled={seeding} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '9px 16px', borderRadius: 10, background: 'transparent', border: '1px solid rgba(200,169,126,0.15)', color: '#c8a97e', fontSize: '0.78rem', fontWeight: 500, cursor: 'pointer', opacity: seeding ? 0.5 : 1, fontFamily: 'inherit' }}>
+              {seeding ? <Loader2 style={{ width: 14, height: 14, animation: 'spin 1s linear infinite' }} /> : <Coffee style={{ width: 14, height: 14 }} />}
               Seed Menu
             </button>
-            <button
-              onClick={() => window.location.reload()}
-              className="p-2 rounded-lg glass hover:bg-brew-accent/10 transition-colors"
-            >
-              <RefreshCw className="w-4 h-4 text-brew-accent" />
+            <button onClick={() => window.location.reload()} style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(23,19,14,0.5)', border: '1px solid rgba(200,169,126,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#c8a97e' }}>
+              <RefreshCw style={{ width: 14, height: 14 }} />
             </button>
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-brew-error/15 text-brew-error text-sm hover:bg-brew-error/25 transition-colors"
-            >
-              <LogOut className="w-4 h-4" />
-              Logout
+            <button onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '9px 16px', borderRadius: 10, background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.12)', color: '#f87171', fontSize: '0.78rem', fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit' }}>
+              <LogOut style={{ width: 14, height: 14 }} /> Logout
             </button>
           </div>
-        </div>
+        </motion.div>
 
         {/* Tabs */}
-        <div className="flex gap-2 mb-8 overflow-x-auto pb-2">
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} style={{ display: 'flex', gap: 8, marginBottom: 32, overflowX: 'auto', paddingBottom: 4 }}>
           {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${
-                activeTab === tab.id
-                  ? 'bg-brew-gold text-brew-dark shadow-lg shadow-brew-gold/20'
-                  : 'glass text-brew-cream/60 hover:text-brew-cream'
-              }`}
-            >
-              <tab.icon className="w-4 h-4" />
+            <button key={tab.id} onClick={() => setActiveTab(tab.id)} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '11px 22px', borderRadius: 14, fontSize: '0.82rem', fontWeight: 500, whiteSpace: 'nowrap', cursor: 'pointer', transition: 'all 0.3s', fontFamily: 'inherit', border: 'none', ...(activeTab === tab.id ? { background: 'linear-gradient(135deg,#c8a97e,#d4a853)', color: '#080604', boxShadow: '0 4px 16px rgba(212,168,83,0.2)' } : { background: 'rgba(28,21,15,0.7)', color: 'rgba(245,230,208,0.5)', border: '1px solid rgba(200,169,126,0.05)' }) }}>
+              <tab.icon style={{ width: 16, height: 16 }} />
               {tab.label}
             </button>
           ))}
-        </div>
+        </motion.div>
+
+        {/* Divider */}
+        <div style={{ height: 1, background: 'linear-gradient(90deg, transparent, rgba(200,169,126,0.08), transparent)', marginBottom: 32 }} />
 
         {/* Tab Content */}
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            exit={{ opacity: 0, y: -16 }}
             transition={{ duration: 0.3 }}
           >
+            {activeTab === 'sessions' && <SessionsTab />}
             {activeTab === 'tables' && <TablesTab />}
             {activeTab === 'orders' && <OrdersTab />}
             {activeTab === 'analytics' && <AnalyticsTab />}
