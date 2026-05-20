@@ -85,7 +85,7 @@ function SessionsTab() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 40, padding: '20px 0' }}>
-      
+
       {/* Top Logo Section */}
       <div style={{ textAlign: 'center' }}>
         <Coffee style={{ width: 32, height: 32, color: '#c8a97e', margin: '0 auto 8px' }} />
@@ -99,7 +99,7 @@ function SessionsTab() {
 
       {/* Center Display (Code + Timer) */}
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 24, width: '100%', maxWidth: 800 }}>
-        
+
         {/* Code Box */}
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} style={{ flex: '1 1 400px', background: 'rgba(28,21,15,0.7)', border: '1px solid rgba(200,169,126,0.05)', borderRadius: 16, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 20px', position: 'relative' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
@@ -107,11 +107,11 @@ function SessionsTab() {
             <span style={{ fontSize: '0.75rem', letterSpacing: '0.2em', color: '#c8a97e', fontWeight: 600 }}>YOUR CODE</span>
             <Leaf style={{ width: 14, height: 14, color: '#c8a97e', transform: 'rotate(135deg)' }} />
           </div>
-          
+
           <div style={{ display: 'flex', gap: 12, letterSpacing: '0.15em', fontFamily: 'monospace', fontSize: '3.8rem', fontWeight: 700, color: '#f5e6d0', lineHeight: 1 }}>
             {code}
           </div>
-          
+
           <Heart style={{ width: 14, height: 14, color: 'rgba(200,169,126,0.3)', marginTop: 24 }} />
         </motion.div>
 
@@ -147,19 +147,19 @@ function SessionsTab() {
               return (
                 <motion.div key={session._id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }} style={{ flex: '0 0 auto', width: 140, background: 'rgba(28,21,15,0.7)', border: '1px solid rgba(200,169,126,0.05)', borderRadius: 12, padding: '24px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', position: 'relative' }}>
                   <button onClick={() => handleRemoveSession(session._id)} title="Remove Session" style={{ position: 'absolute', top: 8, right: 8, background: 'transparent', border: 'none', color: 'rgba(248,113,113,0.3)', cursor: 'pointer', opacity: 0.5 }}>
-                     <Trash2 style={{ width: 14, height: 14 }} />
+                    <Trash2 style={{ width: 14, height: 14 }} />
                   </button>
                   <div style={{ width: 48, height: 48, borderRadius: '50%', border: '1px solid rgba(200,169,126,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
                     <User style={{ width: 20, height: 20, color: 'rgba(200,169,126,0.5)' }} />
                   </div>
                   <p style={{ fontSize: '0.8rem', color: '#f5e6d0', marginBottom: 16, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', width: '100%' }}>{session.customerName}</p>
-                  
+
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, marginBottom: 12, width: '100%' }}>
                     <div style={{ flex: 1, height: 1, background: 'rgba(200,169,126,0.1)' }} />
                     <span style={{ fontSize: '0.6rem', letterSpacing: '0.1em', color: 'rgba(245,230,208,0.3)' }}>TABLE</span>
                     <div style={{ flex: 1, height: 1, background: 'rgba(200,169,126,0.1)' }} />
                   </div>
-                  
+
                   <span style={{ fontSize: '1.8rem', fontFamily: 'var(--font-serif)', color: '#f5e6d0' }}>{tableNum.length === 1 ? `0${tableNum}` : tableNum}</span>
                 </motion.div>
               );
@@ -478,11 +478,10 @@ function OrdersTab() {
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition-all ${
-              filter === f
+            className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition-all ${filter === f
                 ? 'bg-brew-gold text-brew-dark'
                 : 'glass text-brew-cream/60 hover:text-brew-cream'
-            }`}
+              }`}
           >
             {f}
           </button>
@@ -749,7 +748,7 @@ function AnalyticsTab() {
                 const colors = ['#d4a853', '#4ade80', '#60a5fa', '#a78bfa', '#f87171'];
                 const color = colors[idx % colors.length];
                 const percentage = data.totalOrders > 0 ? Math.round((s.count / data.totalOrders) * 100) : 0;
-                
+
                 return (
                   <div key={s._id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -816,7 +815,7 @@ export default function OwnerDashboard() {
     <main style={{ minHeight: '100vh', display: 'flex', backgroundColor: '#120d0a', paddingTop: 80 }}>
       {/* Sidebar */}
       <div style={{ width: 260, borderRight: '1px solid rgba(200,169,126,0.1)', display: 'flex', flexDirection: 'column', padding: '32px 24px', background: 'rgba(18,13,10,0.8)', zIndex: 10 }}>
-        
+
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, flex: 1 }}>
           {tabs.map((tab) => (
             <button
@@ -824,8 +823,8 @@ export default function OwnerDashboard() {
               onClick={() => setActiveTab(tab.id)}
               style={{
                 display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px', borderRadius: 12, fontSize: '0.9rem', fontWeight: 500, cursor: 'pointer', transition: 'all 0.3s', fontFamily: 'inherit', border: 'none',
-                ...(activeTab === tab.id 
-                  ? { background: 'rgba(200,169,126,0.1)', color: '#c8a97e', border: '1px solid rgba(200,169,126,0.2)' } 
+                ...(activeTab === tab.id
+                  ? { background: 'rgba(200,169,126,0.1)', color: '#c8a97e', border: '1px solid rgba(200,169,126,0.2)' }
                   : { background: 'transparent', color: 'rgba(245,230,208,0.5)' })
               }}
             >
@@ -871,7 +870,7 @@ export default function OwnerDashboard() {
                 ))}
               </div>
             )}
-            
+
             {activeTab === 'sessions' && <SessionsTab />}
             {activeTab === 'tables' && <TablesTab />}
             {activeTab === 'orders' && <OrdersTab />}
