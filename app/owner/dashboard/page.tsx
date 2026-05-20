@@ -822,10 +822,10 @@ export default function OwnerDashboard() {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               style={{
-                display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px', borderRadius: 12, fontSize: '0.9rem', fontWeight: 500, cursor: 'pointer', transition: 'all 0.3s', fontFamily: 'inherit', border: 'none',
+                display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px', borderRadius: 12, fontSize: '0.9rem', fontWeight: 500, cursor: 'pointer', transition: 'all 0.3s', fontFamily: 'inherit',
                 ...(activeTab === tab.id
                   ? { background: 'rgba(200,169,126,0.1)', color: '#c8a97e', border: '1px solid rgba(200,169,126,0.2)' }
-                  : { background: 'transparent', color: 'rgba(245,230,208,0.5)' })
+                  : { background: 'transparent', color: 'rgba(245,230,208,0.5)', border: 'none' })
               }}
             >
               <tab.icon style={{ width: 18, height: 18, color: activeTab === tab.id ? '#c8a97e' : 'inherit' }} />
