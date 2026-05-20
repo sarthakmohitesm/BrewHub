@@ -227,6 +227,23 @@ function TablesTab() {
     toast.success('Code copied!');
   };
 
+  const handleRemoveCustomer = async (tableId: string) => {
+    if (!confirm('Remove this customer and free the table?')) return;
+    try {
+      const res = await fetch('/api/tables', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tableId }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      toast.success(data.message || 'Customer removed!');
+      fetchTables();
+    } catch {
+      toast.error('Failed to remove customer');
+    }
+  };
+
   if (loading) {
     return (
       <div className="space-y-4">
@@ -336,7 +353,7 @@ function TablesTab() {
                   <span className="badge badge-completed">Active</span>
                 </div>
                 <p className="text-sm text-brew-cream/50 mb-3">{table.customerName}</p>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 mb-3">
                   <span style={{ flex: 1, padding: '8px 12px', borderRadius: 8, background: 'rgba(14,12,9,0.5)', border: '1px solid rgba(200,169,126,0.05)', fontFamily: 'monospace', color: '#c8a97e', fontSize: '0.875rem', letterSpacing: '0.05em' }}>
                     {table.loginCode}
                   </span>
@@ -348,6 +365,32 @@ function TablesTab() {
                     <Copy className="w-4 h-4 text-brew-accent" />
                   </button>
                 </div>
+                {/* Remove Customer Button */}
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => handleRemoveCustomer(table._id!)}
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 8,
+                    padding: '10px 16px',
+                    borderRadius: 10,
+                    background: 'rgba(248,113,113,0.08)',
+                    border: '1px solid rgba(248,113,113,0.15)',
+                    color: '#f87171',
+                    fontSize: '0.8rem',
+                    fontWeight: 500,
+                    cursor: 'pointer',
+                    fontFamily: 'inherit',
+                    transition: 'all 0.2s',
+                  }}
+                  className="hover:bg-red-500/15"
+                >
+                  <Trash2 style={{ width: 14, height: 14 }} />
+                  Remove Customer
+                </motion.button>
               </motion.div>
             ))}
           </div>
