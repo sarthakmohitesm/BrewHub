@@ -69,7 +69,7 @@ function HeroSection() {
             <Link href="/menu" className="btn-primary" style={{ fontSize: '0.92rem' }}>
               Explore Menu <ArrowRight style={{ width: 16, height: 16 }} />
             </Link>
-            <Link href="/register" className="btn-outline" style={{ fontSize: '0.92rem' }}>Reserve a Table</Link>
+            <Link href="#about" className="btn-outline" style={{ fontSize: '0.92rem' }}>Learn More</Link>
           </motion.div>
 
           <motion.div variants={fadeUp} custom={4} style={{ display: 'flex', gap: 40 }}>
@@ -250,11 +250,11 @@ function CTASection() {
               Ready to <span className="gradient-text">Experience</span> BrewHub?
             </h2>
             <p style={{ color: 'rgba(245,230,208,0.45)', marginBottom: 36, maxWidth: 420, margin: '0 auto 36px', fontSize: '0.9rem', lineHeight: 1.7 }}>
-              Reserve your table, explore our menu, and let us create your perfect coffee moment.
+              Explore our menu and let us create your perfect coffee moment.
             </p>
             <div style={{ display: 'flex', justifyContent: 'center', gap: 14, flexWrap: 'wrap' }}>
-              <Link href="/register" className="btn-primary">Reserve a Table <ArrowRight style={{ width: 15, height: 15 }} /></Link>
-              <Link href="/menu" className="btn-outline">Browse Menu</Link>
+              <Link href="/menu" className="btn-primary">Explore Menu <ArrowRight style={{ width: 15, height: 15 }} /></Link>
+              <Link href="/login" className="btn-outline">Customer Login</Link>
             </div>
           </div>
         </motion.div>
