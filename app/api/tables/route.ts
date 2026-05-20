@@ -44,3 +44,37 @@ export async function GET() {
     return Response.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+
+/** DELETE — Owner removes a customer from a table, freeing it */
+export async function DELETE(request: NextRequest) {
+  try {
+    await connectDB();
+    const { tableId } = await request.json();
+
+    if (!tableId) {
+      return Response.json({ error: 'Table ID is required' }, { status: 400 });
+    }
+
+    const table = await Table.findById(tableId);
+    if (!table) {
+      return Response.json({ error: 'Table not found' }, { status: 404 });
+    }
+
+    // Deactivate the table
+    table.active = false;
+    table.approved = false;
+    await table.save();
+
+    // Also deactivate the corresponding session (same customer + table combo)
+    const Session = (await import('@/models/Session')).default;
+    await Session.updateMany(
+      { customerName: table.customerName, tableName: table.tableName, active: true },
+      { active: false }
+    );
+
+    return Response.json({ message: 'Customer removed, table is now free' });
+  } catch (error) {
+    console.error('Remove table error:', error);
+    return Response.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
