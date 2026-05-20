@@ -71,3 +71,25 @@ export async function PATCH(request: NextRequest) {
     return Response.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+
+/** DELETE — Owner deletes an order */
+export async function DELETE(request: NextRequest) {
+  try {
+    await connectDB();
+    const { orderId } = await request.json();
+
+    if (!orderId) {
+      return Response.json({ error: 'Order ID is required' }, { status: 400 });
+    }
+
+    const order = await Order.findByIdAndDelete(orderId);
+    if (!order) {
+      return Response.json({ error: 'Order not found' }, { status: 404 });
+    }
+
+    return Response.json({ message: 'Order deleted successfully' });
+  } catch (error) {
+    console.error('Delete order error:', error);
+    return Response.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}

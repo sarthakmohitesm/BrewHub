@@ -440,6 +440,23 @@ function OrdersTab() {
     }
   };
 
+  const handleDeleteOrder = async (orderId: string) => {
+    if (!confirm('Are you sure you want to delete this order?')) return;
+    try {
+      const res = await fetch('/api/orders', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      toast.success(data.message || 'Order deleted!');
+      fetchOrders();
+    } catch {
+      toast.error('Failed to delete order');
+    }
+  };
+
   const statusIcon = (status: string) => {
     switch (status) {
       case 'pending': return <Clock className="w-4 h-4" />;
@@ -507,7 +524,29 @@ function OrdersTab() {
                       {order.customerName} · {new Date(order.createdAt!).toLocaleTimeString()}
                     </p>
                   </div>
-                  <span className="text-xl font-bold text-brew-gold">₹{order.totalPrice}</span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-xl font-bold text-brew-gold">₹{order.totalPrice}</span>
+                    <motion.button
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => handleDeleteOrder(order._id!)}
+                      title="Delete Order"
+                      style={{
+                        padding: '8px',
+                        borderRadius: 8,
+                        background: 'rgba(248,113,113,0.08)',
+                        border: '1px solid rgba(248,113,113,0.15)',
+                        cursor: 'pointer',
+                        color: '#f87171',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        transition: 'all 0.2s',
+                      }}
+                      className="hover:bg-red-500/20"
+                    >
+                      <Trash2 style={{ width: 16, height: 16 }} />
+                    </motion.button>
+                  </div>
                 </div>
 
                 {/* Items */}
