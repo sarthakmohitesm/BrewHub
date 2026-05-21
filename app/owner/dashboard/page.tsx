@@ -816,7 +816,7 @@ export default function OwnerDashboard() {
   return (
     <main style={{ minHeight: '100vh', display: 'flex', backgroundColor: '#120d0a', paddingTop: 80 }}>
       {/* Sidebar */}
-      <div style={{ width: 260, borderRight: '1px solid rgba(200,169,126,0.1)', display: 'flex', flexDirection: 'column', padding: '32px 24px', background: 'rgba(18,13,10,0.8)', zIndex: 10 }}>
+      <div style={{ width: 260, borderRight: '1px solid rgba(200,169,126,0.1)', display: 'flex', flexDirection: 'column', padding: '32px 24px', background: 'rgba(18,13,10,0.65)', backdropFilter: 'blur(20px)', zIndex: 10 }}>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, flex: 1 }}>
           {tabs.map((tab) => (
