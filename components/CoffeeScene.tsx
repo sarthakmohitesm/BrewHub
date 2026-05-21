@@ -135,8 +135,20 @@ function CoffeeCup() {
 
 function CoffeeBean({ position, scale = 1 }: { position: [number, number, number]; scale?: number }) {
   const meshRef = useRef<THREE.Mesh>(null);
-  const speed = useMemo(() => 0.2 + Math.random() * 0.3, []);
-  const offset = useMemo(() => Math.random() * Math.PI * 2, []);
+  
+  // Deterministic random numbers generated from the unique position array to preserve purity
+  const seed = position[0] + position[1] * 2 + position[2] * 3;
+  const speed = useMemo(() => {
+    const x = Math.sin(seed) * 10000;
+    const rand = x - Math.floor(x);
+    return 0.2 + rand * 0.3;
+  }, [seed]);
+
+  const offset = useMemo(() => {
+    const x = Math.cos(seed) * 10000;
+    const rand = x - Math.floor(x);
+    return rand * Math.PI * 2;
+  }, [seed]);
 
   useFrame((state) => {
     if (meshRef.current) {

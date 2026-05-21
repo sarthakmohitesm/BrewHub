@@ -38,3 +38,13 @@ export interface CartItem {
   menuItem: IMenuItem;
   quantity: number;
 }
+
+export interface ISession {
+  _id?: string;
+  customerName: string;
+  tableName: string;
+  loginCode: string;
+  loggedInAt: Date;
+  active: boolean;
+}
+

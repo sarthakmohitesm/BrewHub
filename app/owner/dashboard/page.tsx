@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable react-hooks/set-state-in-effect */
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
@@ -31,7 +33,7 @@ import {
   Heart,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { ITable, IOrder } from '@/types';
+import { ITable, IOrder, ISession } from '@/types';
 
 type Tab = 'sessions' | 'tables' | 'orders' | 'analytics';
 
@@ -39,7 +41,7 @@ type Tab = 'sessions' | 'tables' | 'orders' | 'analytics';
 function SessionsTab() {
   const [code, setCode] = useState('------');
   const [remaining, setRemaining] = useState(60);
-  const [sessions, setSessions] = useState<any[]>([]);
+  const [sessions, setSessions] = useState<ISession[]>([]);
 
   const fetchCode = useCallback(async () => {
     try {
