@@ -173,6 +173,47 @@ export default function Navbar() {
                   {link.label}
                 </Link>
               ))}
+
+              <div style={{ height: 1, background: 'rgba(200,169,126,0.1)', margin: '12px 0' }} />
+
+              <div style={{ display: 'flex', gap: 8 }}>
+                <Link
+                  href="/menu"
+                  onClick={() => setMobileOpen(false)}
+                  style={{
+                    flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                    padding: '12px 16px', borderRadius: 10, border: '1px solid rgba(255,255,255,0.06)',
+                    background: 'rgba(255,255,255,0.03)', textDecoration: 'none', color: 'rgba(245,230,208,0.55)',
+                    fontSize: '0.82rem', fontWeight: 500, position: 'relative'
+                  }}
+                >
+                  <ShoppingCart style={{ width: 16, height: 16 }} />
+                  Cart
+                  {totalItems > 0 && (
+                    <span style={{
+                      padding: '2px 6px', borderRadius: '50%',
+                      background: 'linear-gradient(135deg, #c8a97e, #d4a853)',
+                      color: '#080604', fontSize: '0.65rem', fontWeight: 700,
+                    }}>
+                      {totalItems}
+                    </span>
+                  )}
+                </Link>
+
+                <Link
+                  href="/owner/login"
+                  onClick={() => setMobileOpen(false)}
+                  style={{
+                    flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                    padding: '12px 16px', borderRadius: 10, border: '1px solid rgba(255,255,255,0.06)',
+                    background: 'rgba(255,255,255,0.03)', textDecoration: 'none', color: 'rgba(245,230,208,0.55)',
+                    fontSize: '0.82rem', fontWeight: 500
+                  }}
+                >
+                  <LayoutDashboard style={{ width: 14, height: 14 }} />
+                  Owner
+                </Link>
+              </div>
             </div>
           </motion.div>
         )}
