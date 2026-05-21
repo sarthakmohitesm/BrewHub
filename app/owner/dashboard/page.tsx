@@ -148,7 +148,7 @@ function SessionsTab() {
               const tableNum = session.tableName.replace(/\D/g, '') || 'W/I';
               return (
                 <motion.div key={session._id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }} style={{ flex: '0 0 auto', width: 140, background: 'rgba(28,21,15,0.7)', border: '1px solid rgba(200,169,126,0.05)', borderRadius: 12, padding: '24px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', position: 'relative' }}>
-                  <button onClick={() => handleRemoveSession(session._id)} title="Remove Session" style={{ position: 'absolute', top: 8, right: 8, background: 'transparent', border: 'none', color: 'rgba(248,113,113,0.3)', cursor: 'pointer', opacity: 0.5 }}>
+                  <button onClick={() => handleRemoveSession(session._id!)} title="Remove Session" style={{ position: 'absolute', top: 8, right: 8, background: 'transparent', border: 'none', color: 'rgba(248,113,113,0.3)', cursor: 'pointer', opacity: 0.5 }}>
                     <Trash2 style={{ width: 14, height: 14 }} />
                   </button>
                   <div style={{ width: 48, height: 48, borderRadius: '50%', border: '1px solid rgba(200,169,126,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
