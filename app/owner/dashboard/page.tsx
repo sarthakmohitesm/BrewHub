@@ -481,8 +481,8 @@ function OrdersTab() {
             key={f}
             onClick={() => setFilter(f)}
             className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition-all ${filter === f
-                ? 'bg-brew-gold text-brew-dark'
-                : 'glass text-brew-cream/60 hover:text-brew-cream'
+              ? 'bg-brew-gold text-brew-dark'
+              : 'glass text-brew-cream/60 hover:text-brew-cream'
               }`}
           >
             {f}
@@ -824,7 +824,7 @@ export default function OwnerDashboard() {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               style={{
-                display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px', borderRadius: 12, fontSize: '0.9rem', fontWeight: 500, cursor: 'pointer', transition: 'all 0.3s', fontFamily: 'inherit',
+                display: 'flex', alignItems: 'center', gap: 11, padding: '14px 20px', borderRadius: 12, fontSize: '0.9rem', fontWeight: 500, cursor: 'pointer', transition: 'all 0.3s', fontFamily: 'inherit',
                 ...(activeTab === tab.id
                   ? { background: 'rgba(200,169,126,0.1)', color: '#c8a97e', border: '1px solid rgba(200,169,126,0.2)' }
                   : { background: 'transparent', color: 'rgba(245,230,208,0.5)', border: 'none' })
