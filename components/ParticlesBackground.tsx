@@ -2,19 +2,37 @@
 
 import React from 'react';
 
-export default function ParticlesBackground() {
-  const particles = Array.from({ length: 30 }, (_, i) => ({
-    id: i,
-    left: `${Math.random() * 100}%`,
-    size: Math.random() * 3 + 1,
-    delay: `${Math.random() * 15}s`,
-    duration: `${Math.random() * 20 + 15}s`,
-    opacity: Math.random() * 0.5 + 0.1,
-  }));
+interface Particle {
+  id: number;
+  left: string;
+  size: number;
+  delay: string;
+  duration: string;
+  opacity: number;
+}
 
+// Generate static, deterministic particles using sin-based pseudo-random numbers
+// This is 100% pure, prevents hydration mismatches, and has zero runtime state overhead
+const PARTICLES: Particle[] = Array.from({ length: 30 }, (_, i) => {
+  const pseudoRandom = (seed: number) => {
+    const x = Math.sin(seed) * 10000;
+    return x - Math.floor(x);
+  };
+
+  return {
+    id: i,
+    left: `${pseudoRandom(i + 1) * 100}%`,
+    size: pseudoRandom(i + 2) * 3 + 1,
+    delay: `${pseudoRandom(i + 3) * 15}s`,
+    duration: `${pseudoRandom(i + 4) * 20 + 15}s`,
+    opacity: pseudoRandom(i + 5) * 0.5 + 0.1,
+  };
+});
+
+export default function ParticlesBackground() {
   return (
     <div className="particles-bg">
-      {particles.map((p) => (
+      {PARTICLES.map((p) => (
         <div
           key={p.id}
           className="particle"
@@ -31,3 +49,5 @@ export default function ParticlesBackground() {
     </div>
   );
 }
+
+

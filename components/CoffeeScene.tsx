@@ -212,13 +212,17 @@ export default function CoffeeScene() {
         <CoffeeBean position={[2.2, 0.8, -1.2]} scale={0.7} />
 
         {/* Steam */}
-        {Array.from({ length: 12 }).map((_, i) => (
-          <SteamParticle
-            key={i}
-            position={[(Math.random() - 0.5) * 0.5, 1.2, (Math.random() - 0.5) * 0.5]}
-            delay={i * 0.25}
-          />
-        ))}
+        {Array.from({ length: 12 }).map((_, i) => {
+          const x = Math.sin(i * 32.4) * 0.25;
+          const z = Math.cos(i * 57.8) * 0.25;
+          return (
+            <SteamParticle
+              key={i}
+              position={[x, 1.2, z]}
+              delay={i * 0.25}
+            />
+          );
+        })}
 
         {/* City environment preset gives excellent reflections for dark glossy materials */}
         <Environment preset="city" />
